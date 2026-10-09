@@ -1,18 +1,31 @@
-const { supabase, json, readBody } = require('./_lib');
+const { supabase, json } = require('./_lib');
 
 module.exports = async (req, res) => {
-  if (req.method !== 'POST') return json(res, 405, { error: 'Method not allowed' });
-
-  const { password } = await readBody(req);
+  if (req.method !== 'GET') return json(res, 405, { error: 'Method not allowed' });
 
   const { data, error } = await supabase
-    .from('settings')
-    .select('admin_password')
-    .eq('id', 1)
-    .single();
+    .from('menu_items')
+    .select('*')
+    .order('sort_order', { ascending: true });
 
-  if (error || !data) return json(res, 500, { success: false });
+  if (error) return json(res, 500, { error: error.message });
 
-  if (password === data.admin_password) return json(res, 200, { success: true });
-  return json(res, 401, { success: false, message: 'Invalid password' });
+  const menu = { general: [], dosa: [], beverages: [] };
+  for (const row of data) {
+    const item = {
+      id: row.id,
+      name: row.name,
+      price: row.price,
+      emoji: row.emoji || '',
+      halfPlate: row.half_plate,
+      halfPrice: row.half_price,
+      halfPieces: row.half_pieces || '',
+      fullPieces: row.full_pieces || '',
+      mixEligible: row.mix_eligible
+    };
+    if (!item.halfPlate) { delete item.halfPieces; delete item.fullPieces; }
+    if (!menu[row.category]) menu[row.category] = [];
+    menu[row.category].push(item);
+  }
+  return json(res, 200, menu);
 };
