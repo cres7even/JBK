@@ -1,0 +1,1418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Restaurant POS</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+:root {
+  --primary: #d35400;
+  --primary-dark: #a04000;
+  --secondary: #2c3e50;
+  --success: #27ae60;
+  --danger: #e74c3c;
+  --warning: #f39c12;
+  --info: #3498db;
+  --bg: #f4f6f9;
+  --border: #e1e8ed;
+  --text: #2c3e50;
+  --text-light: #7f8c8d;
+  --cash: #27ae60;
+  --upi: #8e44ad;
+  --shadow: 0 2px 8px rgba(0,0,0,0.08);
+  --shadow-lg: 0 4px 20px rgba(0,0,0,0.15);
+  --radius: 10px;
+  --radius-sm: 6px;
+  --transition: all 0.2s ease;
+}
+html, body { height: 100%; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.5;
+  overflow-x: hidden;
+}
+button { cursor: pointer; font-family: inherit; border: none; outline: none; }
+input, select { font-family: inherit; outline: none; }
+.hidden { display: none !important; }
+#login-screen {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #2c3e50 0%, #d35400 100%);
+  padding: 20px;
+}
+.login-box {
+  background: #fff;
+  padding: 40px 30px;
+  border-radius: 16px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  width: 100%;
+  max-width: 400px;
+}
+.login-box h1 {
+  text-align: center;
+  color: var(--primary);
+  font-size: 28px;
+  margin-bottom: 5px;
+}
+.login-box .subtitle {
+  text-align: center;
+  color: var(--text-light);
+  font-size: 13px;
+  margin-bottom: 20px;
+}
+.ist-clock {
+  background: #f8f9fa;
+  border-radius: var(--radius-sm);
+  padding: 12px;
+  text-align: center;
+  margin-bottom: 20px;
+  border: 1px solid var(--border);
+}
+.ist-date { font-size: 16px; font-weight: 600; color: var(--secondary); }
+.ist-time { font-size: 14px; color: var(--primary); font-weight: 600; margin-top: 3px; }
+.ist-label { font-size: 11px; color: var(--text-light); text-transform: uppercase; letter-spacing: 1px; margin-top: 3px; }
+.login-form label { display: block; font-size: 13px; font-weight: 600; color: var(--secondary); margin-bottom: 5px; }
+.login-form input {
+  width: 100%; padding: 12px 14px; border: 2px solid var(--border);
+  border-radius: var(--radius-sm); font-size: 14px; margin-bottom: 15px; transition: var(--transition);
+}
+.login-form input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(211,84,0,0.1); }
+.login-btn {
+  width: 100%; padding: 14px; background: var(--primary); color: #fff;
+  font-size: 15px; font-weight: 600; border-radius: var(--radius-sm); transition: var(--transition);
+}
+.login-btn:hover { background: var(--primary-dark); }
+.login-error {
+  background: #fdeaea; color: var(--danger); padding: 10px;
+  border-radius: var(--radius-sm); font-size: 13px; margin-bottom: 15px; display: none; text-align: center;
+}
+.app-header {
+  background: var(--secondary); color: #fff; padding: 12px 20px;
+  display: flex; align-items: center; justify-content: space-between;
+  position: sticky; top: 0; z-index: 100; box-shadow: var(--shadow);
+  flex-wrap: wrap; gap: 10px;
+}
+.header-brand { font-size: 18px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+.header-brand i { color: var(--primary); }
+.header-nav { display: flex; gap: 5px; flex-wrap: wrap; }
+.nav-btn {
+  background: rgba(255,255,255,0.1); color: #fff; padding: 8px 14px;
+  border-radius: var(--radius-sm); font-size: 13px; font-weight: 500;
+  display: flex; align-items: center; gap: 6px; transition: var(--transition);
+}
+.nav-btn:hover, .nav-btn.active { background: var(--primary); }
+.header-clock { font-size: 12px; color: rgba(255,255,255,0.8); text-align: right; line-height: 1.3; }
+.header-clock strong { color: #fff; font-size: 13px; }
+.container { max-width: 1400px; margin: 0 auto; padding: 15px; }
+.menu-layout { display: grid; grid-template-columns: 1fr 360px; gap: 15px; align-items: start; }
+@media (max-width: 992px) { .menu-layout { grid-template-columns: 1fr; } }
+.category-tabs { display: flex; gap: 8px; margin-bottom: 15px; overflow-x: auto; padding-bottom: 5px; }
+.category-tabs::-webkit-scrollbar { height: 4px; }
+.category-tabs::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+.cat-btn {
+  padding: 12px 20px; background: #fff; border: 2px solid var(--border);
+  border-radius: var(--radius); font-size: 14px; font-weight: 600;
+  color: var(--secondary); white-space: nowrap; display: flex; align-items: center;
+  gap: 8px; transition: var(--transition);
+}
+.cat-btn:hover { border-color: var(--primary); }
+.cat-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+.search-bar { position: relative; margin-bottom: 15px; }
+.search-bar input {
+  width: 100%; padding: 12px 15px 12px 45px; border: 2px solid var(--border);
+  border-radius: var(--radius); font-size: 14px; background: #fff;
+}
+.search-bar input:focus { border-color: var(--primary); }
+.search-bar i {
+  position: absolute; left: 15px; top: 50%; transform: translateY(-50%);
+  color: var(--text-light); font-size: 16px;
+}
+.items-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+.item-card {
+  background: #fff; border: 2px solid var(--border); border-radius: var(--radius);
+  padding: 15px 10px; text-align: center; transition: var(--transition);
+  cursor: pointer; user-select: none;
+}
+.item-card:hover, .item-card:active { border-color: var(--primary); transform: translateY(-2px); box-shadow: var(--shadow); }
+.item-card .emoji { font-size: 32px; margin-bottom: 5px; }
+.item-card .name {
+  font-size: 13px; font-weight: 600; color: var(--secondary);
+  margin-bottom: 4px; min-height: 32px;
+  display: flex; align-items: center; justify-content: center;
+}
+.item-card .price { font-size: 16px; font-weight: 700; color: var(--primary); }
+.item-card .half-hint { font-size: 10px; color: var(--text-light); margin-top: 3px; }
+.cart-panel {
+  background: #fff; border-radius: var(--radius); box-shadow: var(--shadow);
+  position: sticky; top: 80px; max-height: calc(100vh - 100px);
+  display: flex; flex-direction: column;
+}
+.cart-header {
+  padding: 15px; border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.cart-header h3 { font-size: 16px; color: var(--secondary); display: flex; align-items: center; gap: 8px; }
+.cart-clear {
+  background: transparent; color: var(--danger); font-size: 12px;
+  padding: 5px 10px; border-radius: var(--radius-sm); border: 1px solid var(--danger); transition: var(--transition);
+}
+.cart-clear:hover { background: var(--danger); color: #fff; }
+.cart-items { flex: 1; overflow-y: auto; padding: 10px 15px; min-height: 100px; }
+.cart-empty { text-align: center; color: var(--text-light); padding: 30px 10px; font-size: 13px; }
+.cart-item {
+  display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border);
+}
+.cart-item:last-child { border-bottom: none; }
+.cart-item-info { flex: 1; min-width: 0; }
+.cart-item-name {
+  font-size: 13px; font-weight: 600; color: var(--secondary);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.cart-item-price { font-size: 12px; color: var(--text-light); }
+.cart-qty { display: flex; align-items: center; gap: 5px; background: var(--bg); border-radius: var(--radius-sm); padding: 2px; }
+.qty-btn {
+  width: 26px; height: 26px; background: #fff; border-radius: 4px;
+  font-size: 14px; font-weight: 700; color: var(--secondary);
+  display: flex; align-items: center; justify-content: center; transition: var(--transition);
+}
+.qty-btn:hover { background: var(--primary); color: #fff; }
+.qty-value { min-width: 24px; text-align: center; font-weight: 700; font-size: 13px; }
+.cart-item-total { font-size: 13px; font-weight: 700; color: var(--primary); min-width: 55px; text-align: right; }
+.cart-remove { background: transparent; color: var(--danger); font-size: 14px; padding: 4px; transition: var(--transition); }
+.cart-remove:hover { transform: scale(1.2); }
+.cart-footer { border-top: 1px solid var(--border); padding: 15px; background: #fafbfc; border-radius: 0 0 var(--radius) var(--radius); }
+.payment-options { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
+.pay-btn {
+  padding: 12px; border-radius: var(--radius-sm); font-size: 14px; font-weight: 600;
+  border: 2px solid var(--border); background: #fff; color: var(--secondary);
+  display: flex; align-items: center; justify-content: center; gap: 6px; transition: var(--transition);
+}
+.pay-btn.active-cash { background: var(--cash); color: #fff; border-color: var(--cash); }
+.pay-btn.active-upi { background: var(--upi); color: #fff; border-color: var(--upi); }
+.cart-total {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 12px 0; border-top: 1px dashed var(--border); margin-bottom: 10px;
+}
+.cart-total-label { font-size: 15px; font-weight: 600; color: var(--secondary); }
+.cart-total-value { font-size: 22px; font-weight: 700; color: var(--primary); }
+.punch-btn {
+  width: 100%; padding: 16px; background: var(--success); color: #fff;
+  font-size: 16px; font-weight: 700; border-radius: var(--radius-sm);
+  display: flex; align-items: center; justify-content: center; gap: 8px; transition: var(--transition);
+}
+.punch-btn:hover:not(:disabled) { background: #219a52; transform: translateY(-1px); }
+.punch-btn:disabled { background: #bdc3c7; cursor: not-allowed; }
+.modal-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.6);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 1000; padding: 20px; animation: fadeIn 0.2s ease;
+}
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes popIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+.modal-small {
+  background: #fff; border-radius: 16px; padding: 25px;
+  max-width: 400px; width: 100%; box-shadow: var(--shadow-lg); animation: popIn 0.25s ease;
+}
+.modal-small h3 { font-size: 20px; color: var(--secondary); margin-bottom: 5px; text-align: center; }
+.modal-small .modal-sub { text-align: center; color: var(--text-light); font-size: 13px; margin-bottom: 20px; }
+.choice-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.choice-btn {
+  padding: 20px 15px; border: 2px solid var(--border); background: #fff;
+  border-radius: var(--radius); text-align: center; transition: var(--transition); cursor: pointer;
+}
+.choice-btn:hover { border-color: var(--primary); transform: translateY(-2px); box-shadow: var(--shadow); }
+.choice-btn .choice-title { font-size: 14px; font-weight: 700; color: var(--secondary); margin-bottom: 5px; }
+.choice-btn .choice-pieces { font-size: 12px; color: var(--text-light); margin-bottom: 8px; }
+.choice-btn .choice-price { font-size: 22px; font-weight: 700; color: var(--primary); }
+.mix-slot {
+  padding: 15px; border: 2px dashed var(--border); border-radius: var(--radius);
+  text-align: center; color: var(--text-light); font-size: 14px; margin-bottom: 10px;
+  min-height: 60px; display: flex; align-items: center; justify-content: center;
+}
+.mix-slot.filled { border-style: solid; border-color: var(--primary); color: var(--secondary); font-weight: 600; }
+.mix-options { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 15px; }
+.mix-opt {
+  padding: 12px; border: 2px solid var(--border); background: #fff;
+  border-radius: var(--radius-sm); font-weight: 600; color: var(--secondary);
+  transition: var(--transition); font-size: 13px;
+}
+.mix-opt:hover { border-color: var(--primary); }
+.mix-opt.selected { background: var(--primary); color: #fff; border-color: var(--primary); }
+.mix-price { text-align: center; font-size: 24px; font-weight: 700; color: var(--primary); margin: 15px 0; }
+.modal-buttons { display: flex; gap: 10px; margin-top: 15px; }
+.modal-btn {
+  flex: 1; padding: 12px; border-radius: var(--radius-sm);
+  font-size: 14px; font-weight: 600; transition: var(--transition);
+}
+.modal-btn-primary { background: var(--primary); color: #fff; }
+.modal-btn-primary:hover:not(:disabled) { background: var(--primary-dark); }
+.modal-btn-primary:disabled { background: #bdc3c7; cursor: not-allowed; }
+.modal-btn-outline { background: #fff; color: var(--secondary); border: 2px solid var(--border); }
+.modal-btn-outline:hover { border-color: var(--secondary); }
+.token-modal {
+  background: #fff; border-radius: 20px; padding: 40px 30px; text-align: center;
+  max-width: 400px; width: 100%; box-shadow: var(--shadow-lg); animation: popIn 0.3s ease;
+}
+.token-modal .success-icon { font-size: 60px; color: var(--success); margin-bottom: 15px; }
+.token-modal h2 { font-size: 22px; color: var(--secondary); margin-bottom: 10px; }
+.token-modal .token-number {
+  font-size: 72px; font-weight: 900; color: var(--primary);
+  margin: 20px 0; letter-spacing: 2px;
+}
+.token-modal .token-label {
+  font-size: 13px; color: var(--text-light); text-transform: uppercase;
+  letter-spacing: 2px; margin-bottom: 5px;
+}
+.token-modal .order-details {
+  background: var(--bg); border-radius: var(--radius); padding: 15px;
+  margin: 20px 0; text-align: left; font-size: 13px;
+}
+.token-modal .order-details div { display: flex; justify-content: space-between; padding: 4px 0; }
+.token-modal .order-details strong { color: var(--secondary); }
+.page-title {
+  font-size: 22px; color: var(--secondary); margin-bottom: 5px;
+  display: flex; align-items: center; gap: 10px;
+}
+.page-subtitle { font-size: 13px; color: var(--text-light); margin-bottom: 20px; }
+.stats-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px; margin-bottom: 20px;
+}
+.stat-card {
+  background: #fff; border-radius: var(--radius); padding: 20px;
+  box-shadow: var(--shadow); border-left: 4px solid var(--primary);
+}
+.stat-card.green { border-left-color: var(--success); }
+.stat-card.blue { border-left-color: var(--info); }
+.stat-card.purple { border-left-color: var(--upi); }
+.stat-label { font-size: 12px; color: var(--text-light); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+.stat-value { font-size: 28px; font-weight: 700; color: var(--secondary); }
+.card { background: #fff; border-radius: var(--radius); box-shadow: var(--shadow); margin-bottom: 20px; overflow: hidden; }
+.card-header {
+  padding: 15px 20px; border-bottom: 1px solid var(--border);
+  font-size: 15px; font-weight: 600; color: var(--secondary);
+  display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap;
+}
+.card-body { padding: 15px 20px; }
+.data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.data-table th {
+  text-align: left; padding: 10px 8px; background: #f8f9fa;
+  color: var(--text-light); font-weight: 600; font-size: 11px;
+  text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid var(--border);
+}
+.data-table td { padding: 10px 8px; border-bottom: 1px solid var(--border); vertical-align: top; }
+.data-table tr:last-child td { border-bottom: none; }
+.data-table tr:hover td { background: #fafbfc; }
+.token-badge {
+  display: inline-block; background: var(--primary); color: #fff;
+  padding: 3px 10px; border-radius: 12px; font-size: 12px; font-weight: 700;
+}
+.badge { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; }
+.badge-cash { background: #d5f4e6; color: var(--cash); }
+.badge-upi { background: #e8daef; color: var(--upi); }
+.badge-cancelled { background: #fadbd8; color: var(--danger); }
+.action-btn {
+  padding: 5px 10px; border-radius: 5px; font-size: 11px;
+  font-weight: 600; margin-right: 3px; transition: var(--transition);
+}
+.action-edit { background: #ebf5fb; color: var(--info); }
+.action-edit:hover { background: var(--info); color: #fff; }
+.action-cancel { background: #fadbd8; color: var(--danger); }
+.action-cancel:hover { background: var(--danger); color: #fff; }
+.empty-state { text-align: center; padding: 40px 20px; color: var(--text-light); }
+.empty-state i { font-size: 48px; margin-bottom: 15px; opacity: 0.3; }
+.settings-tabs {
+  display: flex; gap: 5px; margin-bottom: 20px;
+  border-bottom: 2px solid var(--border); overflow-x: auto;
+}
+.settings-tab {
+  padding: 10px 18px; background: transparent; color: var(--text-light);
+  font-size: 14px; font-weight: 600; border-bottom: 3px solid transparent;
+  margin-bottom: -2px; white-space: nowrap; transition: var(--transition);
+}
+.settings-tab.active { color: var(--primary); border-bottom-color: var(--primary); }
+.settings-tab-content { display: none; }
+.settings-tab-content.active { display: block; }
+.form-group { margin-bottom: 15px; }
+.form-group label { display: block; font-size: 13px; font-weight: 600; color: var(--secondary); margin-bottom: 5px; }
+.form-group input, .form-group select {
+  width: 100%; padding: 10px 12px; border: 2px solid var(--border);
+  border-radius: var(--radius-sm); font-size: 14px;
+}
+.form-group input:focus, .form-group select:focus { border-color: var(--primary); }
+.btn {
+  padding: 10px 18px; border-radius: var(--radius-sm);
+  font-size: 13px; font-weight: 600; display: inline-flex;
+  align-items: center; gap: 6px; transition: var(--transition);
+}
+.btn-primary { background: var(--primary); color: #fff; }
+.btn-primary:hover { background: var(--primary-dark); }
+.btn-success { background: var(--success); color: #fff; }
+.btn-success:hover { background: #219a52; }
+.btn-danger { background: var(--danger); color: #fff; }
+.btn-danger:hover { background: #c0392b; }
+.btn-secondary { background: #ecf0f1; color: var(--secondary); }
+.btn-secondary:hover { background: #d5dbdb; }
+.search-edit-box { position: relative; margin-bottom: 20px; }
+.search-edit-box input {
+  width: 100%; padding: 14px 45px 14px 45px; border: 2px solid var(--border);
+  border-radius: var(--radius); font-size: 15px;
+}
+.search-edit-box input:focus { border-color: var(--primary); }
+.search-edit-box i.search-icon {
+  position: absolute; left: 15px; top: 50%; transform: translateY(-50%);
+  color: var(--text-light); font-size: 18px;
+}
+.search-results {
+  max-height: 400px; overflow-y: auto;
+  border: 1px solid var(--border); border-radius: var(--radius-sm); background: #fff;
+}
+.search-result-item {
+  padding: 12px 15px; border-bottom: 1px solid var(--border);
+  cursor: pointer; display: flex; justify-content: space-between; align-items: center;
+  transition: var(--transition);
+}
+.search-result-item:hover { background: #f8f9fa; }
+.search-result-item:last-child { border-bottom: none; }
+.search-result-item .item-name { font-weight: 600; color: var(--secondary); font-size: 14px; }
+.search-result-item .item-cat {
+  font-size: 11px; color: var(--text-light); text-transform: uppercase;
+  background: #f0f0f0; padding: 2px 8px; border-radius: 10px;
+}
+.search-result-item .item-price { font-weight: 700; color: var(--primary); font-size: 15px; }
+.item-edit-card {
+  background: #fff; border-radius: var(--radius); box-shadow: var(--shadow);
+  padding: 20px; margin-top: 15px;
+}
+.item-edit-card .edit-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 15px; padding-bottom: 12px; border-bottom: 1px solid var(--border);
+}
+.item-edit-card .edit-header h3 { font-size: 18px; color: var(--secondary); }
+.edit-back {
+  background: #ecf0f1; color: var(--secondary); padding: 8px 14px;
+  border-radius: var(--radius-sm); font-size: 13px; font-weight: 600;
+}
+.edit-back:hover { background: #d5dbdb; }
+.edit-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; }
+@media (max-width: 600px) { .edit-row { grid-template-columns: 1fr; } }
+.edit-row .form-group { margin-bottom: 0; }
+.edit-actions { display: flex; gap: 10px; margin-top: 20px; }
+.checkbox-row { display: flex; gap: 20px; margin-bottom: 15px; flex-wrap: wrap; }
+.checkbox-row label {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 13px; cursor: pointer; font-weight: 600; color: var(--secondary);
+}
+.checkbox-row input[type="checkbox"] { width: 18px; height: 18px; cursor: pointer; }
+.lock-box {
+  max-width: 400px; margin: 40px auto; background: #fff;
+  border-radius: var(--radius); box-shadow: var(--shadow); padding: 30px;
+  text-align: center;
+}
+.lock-box .lock-icon { font-size: 48px; color: var(--primary); margin-bottom: 15px; }
+.lock-box h3 { font-size: 20px; color: var(--secondary); margin-bottom: 8px; }
+.lock-box p { color: var(--text-light); font-size: 13px; margin-bottom: 20px; }
+.toast {
+  position: fixed; bottom: 20px; right: 20px; background: var(--secondary); color: #fff;
+  padding: 12px 20px; border-radius: var(--radius); box-shadow: var(--shadow-lg);
+  font-size: 14px; z-index: 2000; animation: fadeIn 0.3s ease;
+}
+.toast.success { background: var(--success); }
+.toast.error { background: var(--danger); }
+@keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+.page-section { display: none; animation: slideIn 0.2s ease; }
+.page-section.active { display: block; }
+@media (max-width: 768px) {
+  .header-brand { font-size: 16px; }
+  .header-clock { font-size: 10px; }
+  .nav-btn { padding: 6px 10px; font-size: 12px; }
+  .nav-btn span { display: none; }
+  .items-grid { grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 8px; }
+  .item-card { padding: 12px 6px; }
+  .item-card .emoji { font-size: 26px; }
+  .item-card .name { font-size: 12px; min-height: 28px; }
+  .item-card .price { font-size: 14px; }
+  .cart-panel { position: static; max-height: none; }
+  .stat-value { font-size: 22px; }
+  .token-number { font-size: 56px; }
+  .page-title { font-size: 18px; }
+}
+@media (max-width: 480px) {
+  .container { padding: 10px; }
+  .header-nav { width: 100%; justify-content: space-between; }
+  .nav-btn { flex: 1; justify-content: center; }
+  .category-tabs { gap: 5px; }
+  .cat-btn { padding: 10px 14px; font-size: 13px; }
+}
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+</style>
+</head>
+<body>
+
+<div id="login-screen">
+  <div class="login-box">
+    <h1>🍽️ Restaurant POS</h1>
+    <p class="subtitle">Admin Login</p>
+    <div class="ist-clock">
+      <div class="ist-date" id="login-date">--</div>
+      <div class="ist-time" id="login-time">--:--:--</div>
+      <div class="ist-label">IST (UTC +5:30)</div>
+    </div>
+    <div class="login-error" id="login-error">Invalid credentials</div>
+    <form class="login-form" onsubmit="doLogin(event)">
+      <label>Username</label>
+      <input type="text" id="login-user" autocomplete="username" required>
+      <label>Password</label>
+      <input type="password" id="login-pass" autocomplete="current-password" required>
+      <button type="submit" class="login-btn"><i class="fas fa-sign-in-alt"></i> Login</button>
+    </form>
+  </div>
+</div>
+
+<div id="main-app" class="hidden">
+  <header class="app-header">
+    <div class="header-brand"><i class="fas fa-utensils"></i> Restaurant POS</div>
+    <nav class="header-nav">
+      <button class="nav-btn active" data-page="menu" onclick="showPage('menu')"><i class="fas fa-book-open"></i> <span>Menu</span></button>
+      <button class="nav-btn" data-page="sales" onclick="showPage('sales')"><i class="fas fa-chart-line"></i> <span>Sales</span></button>
+      <button class="nav-btn" data-page="settings" onclick="showPage('settings')"><i class="fas fa-cog"></i> <span>Settings</span></button>
+      <button class="nav-btn" onclick="doLogout()"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></button>
+    </nav>
+    <div class="header-clock">
+      <strong id="header-time">--:--:--</strong><br>
+      <span id="header-date">--</span> IST
+    </div>
+  </header>
+
+  <div id="page-menu" class="page-section active">
+    <div class="container">
+      <div class="menu-layout">
+        <div>
+          <div class="category-tabs">
+            <button class="cat-btn active" data-cat="general" onclick="switchCategory('general')"><i class="fas fa-utensils"></i> General</button>
+            <button class="cat-btn" data-cat="dosa" onclick="switchCategory('dosa')"><i class="fas fa-circle"></i> Dosa</button>
+            <button class="cat-btn" data-cat="beverages" onclick="switchCategory('beverages')"><i class="fas fa-coffee"></i> Beverages</button>
+          </div>
+          <div class="search-bar">
+            <i class="fas fa-search"></i>
+            <input type="text" id="menu-search" placeholder="Search items..." oninput="searchItems()">
+          </div>
+          <div class="items-grid" id="items-grid"></div>
+        </div>
+        <div class="cart-panel">
+          <div class="cart-header">
+            <h3><i class="fas fa-shopping-cart"></i> Current Order</h3>
+            <button class="cart-clear" onclick="clearCart()"><i class="fas fa-trash"></i> Clear</button>
+          </div>
+          <div class="cart-items" id="cart-items">
+            <div class="cart-empty">
+              <i class="fas fa-shopping-basket"></i><br>
+              No items yet<br>
+              <small>Click items to add</small>
+            </div>
+          </div>
+          <div class="cart-footer">
+            <div class="payment-options">
+              <button class="pay-btn active-cash" id="pay-cash" onclick="selectPayment('Cash')"><i class="fas fa-money-bill-wave"></i> Cash</button>
+              <button class="pay-btn" id="pay-upi" onclick="selectPayment('UPI')"><i class="fas fa-mobile-alt"></i> UPI</button>
+            </div>
+            <div class="cart-total">
+              <span class="cart-total-label">Total</span>
+              <span class="cart-total-value" id="cart-total">₹0</span>
+            </div>
+            <button class="punch-btn" id="punch-btn" onclick="punchOrder()" disabled><i class="fas fa-check-circle"></i> Punch Order</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="page-sales" class="page-section">
+    <div class="container">
+      <h1 class="page-title"><i class="fas fa-chart-line"></i> Sales Dashboard</h1>
+      <p class="page-subtitle" id="sales-date-label"></p>
+      <div class="stats-grid">
+        <div class="stat-card"><div class="stat-label">Total Sales</div><div class="stat-value" id="sales-total">₹0</div></div>
+        <div class="stat-card green"><div class="stat-label">Cash</div><div class="stat-value" id="sales-cash">₹0</div></div>
+        <div class="stat-card purple"><div class="stat-label">UPI</div><div class="stat-value" id="sales-upi">₹0</div></div>
+        <div class="stat-card blue"><div class="stat-label">Total Orders</div><div class="stat-value" id="sales-orders">0</div></div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <span><i class="fas fa-list"></i> Today's Orders</span>
+          <button class="btn btn-secondary" onclick="loadSales()"><i class="fas fa-sync"></i> Refresh</button>
+        </div>
+        <div class="card-body">
+          <div style="overflow-x:auto;">
+            <table class="data-table">
+              <thead><tr><th>Token</th><th>Time</th><th>Items</th><th>Total</th><th>Payment</th><th>Actions</th></tr></thead>
+              <tbody id="sales-tbody"><tr><td colspan="6" class="empty-state">No orders today</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="page-settings" class="page-section">
+    <div class="container">
+      <h1 class="page-title"><i class="fas fa-cog"></i> Settings</h1>
+      <div class="settings-tabs">
+        <button class="settings-tab active" onclick="switchSettingsTab('menu', event)"><i class="fas fa-utensils"></i> Edit Menu</button>
+        <button class="settings-tab" onclick="switchSettingsTab('admin', event)"><i class="fas fa-user-shield"></i> Admin Panel</button>
+        <button class="settings-tab" onclick="switchSettingsTab('backup', event)"><i class="fas fa-download"></i> Backup</button>
+      </div>
+
+      <div id="settings-menu" class="settings-tab-content active">
+        <div class="card">
+          <div class="card-body">
+            <p style="color:var(--text-light);font-size:13px;margin-bottom:15px;">
+              <i class="fas fa-info-circle"></i> Type an item name below. Click the result to edit its details.
+            </p>
+            <div class="search-edit-box">
+              <i class="fas fa-search search-icon"></i>
+              <input type="text" id="edit-menu-search" placeholder="Search menu item (e.g., Idli, Masala Dosa)..." oninput="searchMenuEditor()">
+            </div>
+            <div id="edit-search-results" class="search-results hidden"></div>
+            <div id="edit-item-panel"></div>
+          </div>
+        </div>
+      </div>
+
+      <div id="settings-admin" class="settings-tab-content">
+        <div class="card">
+          <div class="card-header"><span><i class="fas fa-user-shield"></i> Change Admin Credentials</span></div>
+          <div class="card-body">
+            <div class="form-group">
+              <label>Current Username</label>
+              <input type="text" id="admin-current-user" readonly>
+            </div>
+            <div class="form-group">
+              <label>Current / Old Password <span style="color:var(--danger);">*</span></label>
+              <input type="password" id="admin-old-pass" placeholder="Enter current password" required>
+            </div>
+            <div class="form-group">
+              <label>New Username (leave blank to keep)</label>
+              <input type="text" id="admin-new-user" placeholder="Enter new username">
+            </div>
+            <div class="form-group">
+              <label>New Password (leave blank to keep)</label>
+              <input type="password" id="admin-new-pass" placeholder="Enter new password">
+            </div>
+            <div class="form-group">
+              <label>Confirm New Password</label>
+              <input type="password" id="admin-confirm-pass" placeholder="Re-enter new password">
+            </div>
+            <button class="btn btn-primary" onclick="updateAdmin()"><i class="fas fa-save"></i> Change Password</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="settings-backup" class="settings-tab-content">
+        <div id="backup-lock">
+          <div class="lock-box">
+            <div class="lock-icon"><i class="fas fa-lock"></i></div>
+            <h3>Verify Admin Access</h3>
+            <p>Enter your admin password to view backup reports.</p>
+            <div class="form-group" style="text-align:left;">
+              <label>Password</label>
+              <input type="password" id="backup-pass" placeholder="Enter admin password" onkeydown="if(event.key==='Enter') verifyBackupAccess()">
+            </div>
+            <button class="btn btn-primary" style="width:100%;justify-content:center;" onclick="verifyBackupAccess()">
+              <i class="fas fa-unlock"></i> Unlock Backup
+            </button>
+            <p id="backup-error" style="color:var(--danger);font-size:13px;margin-top:12px;display:none;"></p>
+          </div>
+        </div>
+        <div id="backup-content-wrapper" class="hidden">
+          <div class="card">
+            <div class="card-header">
+              <span><i class="fas fa-download"></i> Daily Backup Report</span>
+              <button class="btn btn-secondary" onclick="lockBackup()"><i class="fas fa-lock"></i> Lock</button>
+            </div>
+            <div class="card-body">
+              <div class="form-group" style="max-width:300px;">
+                <label>Select Date</label>
+                <input type="date" id="backup-date" onchange="loadBackup()">
+              </div>
+              <div id="backup-content"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="modal-container"></div>
+<script>
+const API = (window.location.origin.startsWith('http'))
+  ? window.location.origin + '/api'
+  : 'http://192.168.0.110:3001/api';
+let MENU = { general: [], dosa: [], beverages: [] };
+let CART = [];
+let PAYMENT = 'Cash';
+let CURRENT_CATEGORY = 'general';
+let CURRENT_USER = '';
+let MIX_SELECTION = { item1: null, item2: null };
+let BACKUP_UNLOCKED = false;
+
+// IST CLOCK
+function updateClock() {
+  const now = new Date();
+  const istOffset = 5.5 * 60 * 60 * 1000;
+  const ist = new Date(now.getTime() + istOffset);
+  const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const d = ist.getUTCDate();
+  const m = months[ist.getUTCMonth()];
+  const y = ist.getUTCFullYear();
+  const hh = String(ist.getUTCHours()).padStart(2,'0');
+  const mm = String(ist.getUTCMinutes()).padStart(2,'0');
+  const ss = String(ist.getUTCSeconds()).padStart(2,'0');
+  const dateStr = `${d} ${m} ${y}`;
+  const timeStr = `${hh}:${mm}:${ss}`;
+  const el1 = document.getElementById('login-date'); if (el1) el1.textContent = dateStr;
+  const el2 = document.getElementById('login-time'); if (el2) el2.textContent = timeStr;
+  const el3 = document.getElementById('header-date'); if (el3) el3.textContent = dateStr;
+  const el4 = document.getElementById('header-time'); if (el4) el4.textContent = timeStr;
+}
+setInterval(updateClock, 1000);
+updateClock();
+
+// LOGIN
+async function doLogin(e) {
+  e.preventDefault();
+  const username = document.getElementById('login-user').value.trim();
+  const password = document.getElementById('login-pass').value;
+  try {
+    const res = await fetch(`${API}/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password })
+    });
+    const data = await res.json();
+    if (data.success) {
+      CURRENT_USER = data.username;
+      sessionStorage.setItem('pos_logged_in', 'true');
+      sessionStorage.setItem('pos_user', data.username);
+      document.getElementById('login-screen').classList.add('hidden');
+      document.getElementById('main-app').classList.remove('hidden');
+      await loadMenu();
+      showPage('menu');
+    } else {
+      const err = document.getElementById('login-error');
+      err.textContent = 'Invalid credentials';
+      err.style.display = 'block';
+    }
+  } catch (err) {
+    alert('Cannot connect to backend. Is the server running?');
+  }
+}
+function doLogout() {
+  sessionStorage.removeItem('pos_logged_in');
+  sessionStorage.removeItem('pos_user');
+  location.reload();
+}
+
+// NAVIGATION
+function showPage(page) {
+  document.querySelectorAll('.page-section').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-' + page).classList.add('active');
+  const btn = document.querySelector(`.nav-btn[data-page="${page}"]`);
+  if (btn) btn.classList.add('active');
+  if (page === 'sales') loadSales();
+  if (page === 'settings') {
+    lockBackup();
+    loadAdminInfo();
+  }
+}
+
+// MENU
+async function loadMenu() {
+  const res = await fetch(`${API}/menu`);
+  MENU = await res.json();
+  renderItems();
+}
+function switchCategory(cat) {
+  CURRENT_CATEGORY = cat;
+  document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+  const btn = document.querySelector(`.cat-btn[data-cat="${cat}"]`);
+  if (btn) btn.classList.add('active');
+  document.getElementById('menu-search').value = '';
+  renderItems();
+}
+function renderItems() {
+  const grid = document.getElementById('items-grid');
+  const items = MENU[CURRENT_CATEGORY] || [];
+  if (items.length === 0) {
+    grid.innerHTML = '<div class="empty-state"><i class="fas fa-inbox"></i><br>No items in this category</div>';
+    return;
+  }
+  grid.innerHTML = items.map(item => {
+    const hint = item.halfPlate ? `<div class="half-hint">Half: ₹${item.halfPrice}</div>` : '';
+    return `
+      <div class="item-card" onclick="handleItemClick('${item.id}')">
+        <div class="emoji">${item.emoji || '🍽️'}</div>
+        <div class="name">${item.name}</div>
+        <div class="price">₹${item.price}</div>
+        ${hint}
+      </div>
+    `;
+  }).join('');
+}
+function searchItems() {
+  const q = document.getElementById('menu-search').value.toLowerCase().trim();
+  const grid = document.getElementById('items-grid');
+  if (!q) { renderItems(); return; }
+  const all = [];
+  Object.keys(MENU).forEach(cat => MENU[cat].forEach(item => all.push({ ...item, cat })));
+  const results = all.filter(i => i.name.toLowerCase().includes(q));
+  if (results.length === 0) {
+    grid.innerHTML = '<div class="empty-state"><i class="fas fa-search"></i><br>No items found</div>';
+    return;
+  }
+  grid.innerHTML = results.map(item => {
+    const hint = item.halfPlate ? `<div class="half-hint">Half: ₹${item.halfPrice}</div>` : '';
+    return `
+      <div class="item-card" onclick="handleItemClick('${item.id}')">
+        <div class="emoji">${item.emoji || '🍽️'}</div>
+        <div class="name">${item.name}</div>
+        <div class="price">₹${item.price}</div>
+        ${hint}
+      </div>
+    `;
+  }).join('');
+}
+function findItemById(id) {
+  for (const cat of Object.keys(MENU)) {
+    const found = MENU[cat].find(i => i.id === id);
+    if (found) return found;
+  }
+  return null;
+}
+
+// ITEM CLICK
+function handleItemClick(id) {
+  const item = findItemById(id);
+  if (!item) return;
+  if (item.halfPlate) {
+    showHalfPlateModal(item);
+  } else {
+    addToCart(id, 'Full', item.price);
+  }
+}
+
+// HALF PLATE MODAL
+function showHalfPlateModal(item) {
+  const container = document.getElementById('modal-container');
+  container.innerHTML = `
+    <div class="modal-overlay">
+      <div class="modal-small">
+        <h3>${item.emoji || ''} ${item.name}</h3>
+        <p class="modal-sub">Choose plate size</p>
+        <div class="choice-grid">
+          <div class="choice-btn" onclick="choosePlate('${item.id}', 'Full')">
+            <div class="choice-title">Full Plate</div>
+            <div class="choice-pieces">${item.fullPieces || ''}</div>
+            <div class="choice-price">₹${item.price}</div>
+          </div>
+          <div class="choice-btn" onclick="choosePlate('${item.id}', 'Half')">
+            <div class="choice-title">Half Plate</div>
+            <div class="choice-pieces">${item.halfPieces || ''}</div>
+            <div class="choice-price">₹${item.halfPrice}</div>
+          </div>
+        </div>
+        <div class="modal-buttons">
+          <button class="modal-btn modal-btn-outline" onclick="closeModal()">Cancel</button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+function choosePlate(id, type) {
+  const item = findItemById(id);
+  if (!item) return;
+  if (type === 'Full') addToCart(id, 'Full', item.price);
+  else addToCart(id + '-half', 'Half', item.halfPrice, `Half ${item.name}`);
+  closeModal();
+}
+
+// MIX PLATE
+function openMixPlate() {
+  MIX_SELECTION = { item1: null, item2: null };
+  showMixModal();
+}
+function showMixModal() {
+  const eligible = MENU.general.filter(i => i.mixEligible);
+  const container = document.getElementById('modal-container');
+  const price = calcMixPrice();
+  container.innerHTML = `
+    <div class="modal-overlay">
+      <div class="modal-small">
+        <h3>🍽️ Mix Plate</h3>
+        <p class="modal-sub">Select 2 different items (½ + ½)</p>
+        <div class="mix-slot ${MIX_SELECTION.item1 ? 'filled' : ''}">
+          ${MIX_SELECTION.item1 ? '½ ' + MIX_SELECTION.item1.name : 'Slot 1: Pick below'}
+        </div>
+        <div class="mix-options">
+          ${eligible.map(i => {
+            const sel = (MIX_SELECTION.item1 && MIX_SELECTION.item1.id === i.id) || (MIX_SELECTION.item2 && MIX_SELECTION.item2.id === i.id);
+            return `<button class="mix-opt ${sel ? 'selected' : ''}" onclick='pickMix(${JSON.stringify(i)})'>${i.emoji} ${i.name}</button>`;
+          }).join('')}
+        </div>
+        <div class="mix-slot ${MIX_SELECTION.item2 ? 'filled' : ''}">
+          ${MIX_SELECTION.item2 ? '½ ' + MIX_SELECTION.item2.name : 'Slot 2: Pick below'}
+        </div>
+        <div class="mix-price" id="mix-price">₹${price}</div>
+        <div class="modal-buttons">
+          <button class="modal-btn modal-btn-outline" onclick="closeModal()">Cancel</button>
+          <button class="modal-btn modal-btn-primary" id="mix-add-btn" ${MIX_SELECTION.item1 && MIX_SELECTION.item2 ? '' : 'disabled'} onclick="addMixToCart()">
+            Add to Order
+          </button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+function pickMix(item) {
+  if (!MIX_SELECTION.item1) { MIX_SELECTION.item1 = item; }
+  else if (!MIX_SELECTION.item2 && item.id !== MIX_SELECTION.item1.id) { MIX_SELECTION.item2 = item; }
+  else if (MIX_SELECTION.item1 && MIX_SELECTION.item2) {
+    if (item.id === MIX_SELECTION.item1.id) {
+      MIX_SELECTION.item1 = MIX_SELECTION.item2; MIX_SELECTION.item2 = null;
+    } else {
+      MIX_SELECTION.item2 = item;
+    }
+  }
+  else if (MIX_SELECTION.item1 && item.id === MIX_SELECTION.item1.id) { MIX_SELECTION.item1 = null; }
+  else if (MIX_SELECTION.item2 && item.id === MIX_SELECTION.item2.id) { MIX_SELECTION.item2 = null; }
+  showMixModal();
+}
+function calcMixPrice() {
+  if (!MIX_SELECTION.item1 || !MIX_SELECTION.item2) return 0;
+  const names = [MIX_SELECTION.item1.name, MIX_SELECTION.item2.name].join(' ').toLowerCase();
+  return names.includes('poori') ? 50 : 40;
+}
+function addMixToCart() {
+  if (!MIX_SELECTION.item1 || !MIX_SELECTION.item2) return;
+  const price = calcMixPrice();
+  const label = `Mix: ${MIX_SELECTION.item1.name} + ${MIX_SELECTION.item2.name}`;
+  const id = `mix-${MIX_SELECTION.item1.id}-${MIX_SELECTION.item2.id}`;
+  addToCart(id, 'Mix', price, label);
+  closeModal();
+}
+
+// CART
+function addToCart(id, plateType, price, customName) {
+  const baseId = id.split('-')[0];
+  const item = findItemById(baseId) || findItemById(id);
+  let name, emoji;
+  if (customName) { name = customName; emoji = item ? (item.emoji || '') : ''; }
+  else { name = item.name; emoji = item.emoji || ''; }
+
+  const existing = CART.find(c => c.id === id && c.plateType === plateType);
+  if (existing) { existing.quantity++; }
+  else { CART.push({ id, name, emoji, price, quantity: 1, plateType }); }
+  renderCart();
+}
+function changeQty(id, plateType, delta) {
+  const item = CART.find(c => c.id === id && c.plateType === plateType);
+  if (!item) return;
+  item.quantity += delta;
+  if (item.quantity <= 0) CART = CART.filter(c => !(c.id === id && c.plateType === plateType));
+  renderCart();
+}
+function removeFromCart(id, plateType) {
+  CART = CART.filter(c => !(c.id === id && c.plateType === plateType));
+  renderCart();
+}
+function clearCart() {
+  if (CART.length === 0) return;
+  if (!confirm('Clear current order?')) return;
+  CART = [];
+  renderCart();
+}
+function selectPayment(method) {
+  PAYMENT = method;
+  document.getElementById('pay-cash').className = 'pay-btn' + (method === 'Cash' ? ' active-cash' : '');
+  document.getElementById('pay-upi').className = 'pay-btn' + (method === 'UPI' ? ' active-upi' : '');
+}
+function renderCart() {
+  const el = document.getElementById('cart-items');
+  if (CART.length === 0) {
+    el.innerHTML = '<div class="cart-empty"><i class="fas fa-shopping-basket"></i><br>No items yet<br><small>Click items to add</small></div>';
+  } else {
+    el.innerHTML = CART.map(item => `
+      <div class="cart-item">
+        <div class="cart-item-info">
+          <div class="cart-item-name">${item.emoji || ''} ${item.name}</div>
+          <div class="cart-item-price">₹${item.price} each</div>
+        </div>
+        <div class="cart-qty">
+          <button class="qty-btn" onclick="changeQty('${item.id}', '${item.plateType}', -1)">−</button>
+          <span class="qty-value">${item.quantity}</span>
+          <button class="qty-btn" onclick="changeQty('${item.id}', '${item.plateType}', 1)">+</button>
+        </div>
+        <div class="cart-item-total">₹${item.price * item.quantity}</div>
+        <button class="cart-remove" onclick="removeFromCart('${item.id}', '${item.plateType}')"><i class="fas fa-times"></i></button>
+      </div>
+    `).join('');
+  }
+  const total = CART.reduce((s, i) => s + i.price * i.quantity, 0);
+  document.getElementById('cart-total').textContent = '₹' + total;
+  document.getElementById('punch-btn').disabled = CART.length === 0;
+}
+
+// PUNCH ORDER
+async function punchOrder() {
+  if (CART.length === 0) return;
+  const btn = document.getElementById('punch-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+  try {
+    const res = await fetch(`${API}/orders`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ items: CART, payment: PAYMENT })
+    });
+    const order = await res.json();
+    if (res.ok) {
+      showTokenModal(order);
+      CART = [];
+      selectPayment('Cash');
+      renderCart();
+    } else {
+      alert('Error: ' + (order.error || 'Could not save'));
+    }
+  } catch (e) {
+    alert('Network error. Is the backend running?');
+  }
+  btn.disabled = false;
+  btn.innerHTML = '<i class="fas fa-check-circle"></i> Punch Order';
+}
+function showTokenModal(order) {
+  const container = document.getElementById('modal-container');
+  const itemsHtml = order.items.map(i => `<div><span>${i.name} × ${i.quantity}</span><strong>₹${i.price * i.quantity}</strong></div>`).join('');
+  container.innerHTML = `
+    <div class="modal-overlay">
+      <div class="token-modal">
+        <div class="success-icon"><i class="fas fa-check-circle"></i></div>
+        <h2>Order Placed!</h2>
+        <div class="token-label">Token Number</div>
+        <div class="token-number">#${String(order.token).padStart(3, '0')}</div>
+        <div class="order-details">
+          ${itemsHtml}
+          <div style="border-top:1px dashed var(--border);margin-top:8px;padding-top:8px;">
+            <span>Total</span><strong>₹${order.total}</strong>
+          </div>
+          <div><span>Payment</span><strong>${order.payment}</strong></div>
+          <div><span>Time</span><strong>${order.createdAt}</strong></div>
+        </div>
+        <div class="modal-buttons">
+          <button class="modal-btn modal-btn-primary" onclick="closeModal()"><i class="fas fa-check"></i> Done</button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+function closeModal() { document.getElementById('modal-container').innerHTML = ''; }
+
+// SALES
+async function loadSales() {
+  const res = await fetch(`${API}/orders/today`);
+  const orders = await res.json();
+  const active = orders.filter(o => !o.cancelled);
+  const total = active.reduce((s, o) => s + o.total, 0);
+  const cash = active.filter(o => o.payment === 'Cash').reduce((s, o) => s + o.total, 0);
+  const upi = active.filter(o => o.payment === 'UPI').reduce((s, o) => s + o.total, 0);
+  document.getElementById('sales-total').textContent = '₹' + total;
+  document.getElementById('sales-cash').textContent = '₹' + cash;
+  document.getElementById('sales-upi').textContent = '₹' + upi;
+  document.getElementById('sales-orders').textContent = active.length;
+  const today = new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' });
+  document.getElementById('sales-date-label').textContent = 'Today — ' + today;
+  const tbody = document.getElementById('sales-tbody');
+  if (orders.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="6" class="empty-state">No orders today</td></tr>';
+    return;
+  }
+  tbody.innerHTML = [...orders].reverse().map(o => {
+    const items = o.items.map(i => `${i.name} × ${i.quantity}`).join(', ');
+    const badge = o.cancelled ? '<span class="badge badge-cancelled">CANCELLED</span>' :
+      (o.payment === 'Cash' ? '<span class="badge badge-cash">Cash</span>' : '<span class="badge badge-upi">UPI</span>');
+    const actions = o.cancelled ? '—' : `
+      <button class="action-btn action-edit" onclick="editOrder(${o.token})"><i class="fas fa-edit"></i> Edit</button>
+      <button class="action-btn action-cancel" onclick="cancelOrder(${o.token})"><i class="fas fa-ban"></i> Cancel</button>
+    `;
+    return `<tr>
+      <td><span class="token-badge">#${String(o.token).padStart(3, '0')}</span></td>
+      <td>${o.createdAt}<br><small style="color:#888;">upd: ${o.updatedAt}</small></td>
+      <td>${items}</td>
+      <td><strong>₹${o.total}</strong></td>
+      <td>${badge}</td>
+      <td>${actions}</td>
+    </tr>`;
+  }).join('');
+}
+
+// EDIT ORDER
+async function editOrder(token) {
+  const res = await fetch(`${API}/orders`);
+  const orders = await res.json();
+  const order = orders.find(o => o.token === token);
+  if (!order) return;
+  window._editOrderData = JSON.parse(JSON.stringify(order.items));
+  renderEditModal(order);
+}
+function renderEditModal(order) {
+  const container = document.getElementById('modal-container');
+  const data = window._editOrderData;
+  const itemsHtml = data.map((i, idx) => `
+    <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px;">
+      <span style="flex:1;">${i.name}</span>
+      <button class="qty-btn" onclick="editQty(${idx},-1)">−</button>
+      <span class="qty-value">${i.quantity}</span>
+      <button class="qty-btn" onclick="editQty(${idx},1)">+</button>
+      <span style="min-width:60px;text-align:right;font-weight:700;">₹${i.price * i.quantity}</span>
+      <button class="cart-remove" onclick="editRemove(${idx})"><i class="fas fa-times"></i></button>
+    </div>
+  `).join('');
+  const total = data.reduce((s, i) => s + i.price * i.quantity, 0);
+  container.innerHTML = `
+    <div class="modal-overlay">
+      <div class="modal-small" style="max-width:600px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;padding-bottom:12px;border-bottom:1px solid var(--border);margin-bottom:15px;">
+          <h3 style="font-size:18px;color:var(--secondary);">Edit Order #${String(order.token).padStart(3,'0')}</h3>
+          <button style="background:transparent;font-size:24px;color:var(--text-light);" onclick="closeModal()">×</button>
+        </div>
+        <div style="font-size:12px;color:#888;margin-bottom:10px;">
+          Created: ${order.createdAt} | Last Updated: ${order.updatedAt}
+        </div>
+        <div id="edit-items">${itemsHtml}</div>
+        <div style="border-top:1px dashed #ddd;margin-top:12px;padding-top:12px;text-align:right;font-size:18px;font-weight:700;">
+          Total: <span id="edit-total">₹${total}</span>
+        </div>
+        <div class="form-group" style="margin-top:12px;">
+          <label>Payment Method</label>
+          <select id="edit-payment">
+            <option value="Cash" ${order.payment === 'Cash' ? 'selected' : ''}>Cash</option>
+            <option value="UPI" ${order.payment === 'UPI' ? 'selected' : ''}>UPI</option>
+          </select>
+        </div>
+        <div class="modal-buttons">
+          <button class="modal-btn modal-btn-outline" onclick="closeModal()">Cancel</button>
+          <button class="modal-btn modal-btn-primary" onclick="saveEditedOrder(${order.token})"><i class="fas fa-save"></i> Save Changes</button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+function editQty(idx, delta) {
+  window._editOrderData[idx].quantity += delta;
+  if (window._editOrderData[idx].quantity <= 0) window._editOrderData.splice(idx, 1);
+  refreshEditModal();
+}
+function editRemove(idx) {
+  window._editOrderData.splice(idx, 1);
+  refreshEditModal();
+}
+function refreshEditModal() {
+  const el = document.getElementById('edit-items');
+  const data = window._editOrderData;
+  if (data.length === 0) { el.innerHTML = '<div class="empty-state">No items</div>'; }
+  else {
+    el.innerHTML = data.map((i, idx) => `
+      <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px;">
+        <span style="flex:1;">${i.name}</span>
+        <button class="qty-btn" onclick="editQty(${idx},-1)">−</button>
+        <span class="qty-value">${i.quantity}</span>
+        <button class="qty-btn" onclick="editQty(${idx},1)">+</button>
+        <span style="min-width:60px;text-align:right;font-weight:700;">₹${i.price * i.quantity}</span>
+        <button class="cart-remove" onclick="editRemove(${idx})"><i class="fas fa-times"></i></button>
+      </div>
+    `).join('');
+  }
+  const total = data.reduce((s, i) => s + i.price * i.quantity, 0);
+  const t = document.getElementById('edit-total');
+  if (t) t.textContent = '₹' + total;
+}
+async function saveEditedOrder(token) {
+  const data = window._editOrderData;
+  if (data.length === 0) { alert('Order must have at least one item'); return; }
+  const payment = document.getElementById('edit-payment').value;
+  const res = await fetch(`${API}/orders/${token}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ items: data, payment })
+  });
+  if (res.ok) { closeModal(); loadSales(); }
+  else { alert('Failed to update order'); }
+}
+
+// CANCEL ORDER
+async function cancelOrder(token) {
+  if (!confirm(`Cancel Order #${String(token).padStart(3,'0')}?\n\nThis will mark it as cancelled but keep the record.`)) return;
+  const res = await fetch(`${API}/orders/${token}/cancel`, { method: 'PUT' });
+  if (res.ok) loadSales();
+  else alert('Failed to cancel');
+}
+
+// SETTINGS
+function switchSettingsTab(tab, event) {
+  document.querySelectorAll('.settings-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.settings-tab-content').forEach(c => c.classList.remove('active'));
+  if (event) event.target.classList.add('active');
+  document.getElementById('settings-' + tab).classList.add('active');
+  if (tab === 'admin') loadAdminInfo();
+  if (tab === 'backup') {
+    lockBackup();
+    const bd = document.getElementById('backup-date');
+    if (!bd.value) bd.value = new Date().toISOString().split('T')[0];
+  }
+}
+
+// MENU EDITOR
+function searchMenuEditor() {
+  const q = document.getElementById('edit-menu-search').value.toLowerCase().trim();
+  const resultsEl = document.getElementById('edit-search-results');
+  const panelEl = document.getElementById('edit-item-panel');
+  panelEl.innerHTML = '';
+  if (!q) { resultsEl.classList.add('hidden'); return; }
+  const all = [];
+  Object.keys(MENU).forEach(cat => MENU[cat].forEach(item => all.push({ ...item, cat })));
+  const results = all.filter(i => i.name.toLowerCase().includes(q));
+  if (results.length === 0) {
+    resultsEl.innerHTML = '<div class="search-result-item" style="color:#888;">No matching items</div>';
+    resultsEl.classList.remove('hidden');
+    return;
+  }
+  resultsEl.innerHTML = results.map(item => `
+    <div class="search-result-item" onclick="openItemEditor('${item.id}')">
+      <div>
+        <div class="item-name">${item.emoji || ''} ${item.name}</div>
+        <span class="item-cat">${item.cat}</span>
+      </div>
+      <div class="item-price">₹${item.price}</div>
+    </div>
+  `).join('');
+  resultsEl.classList.remove('hidden');
+}
+function openItemEditor(id) {
+  const item = findItemById(id);
+  if (!item) return;
+  const cat = Object.keys(MENU).find(c => MENU[c].find(i => i.id === id));
+  document.getElementById('edit-search-results').classList.add('hidden');
+  document.getElementById('edit-menu-search').value = '';
+  const panel = document.getElementById('edit-item-panel');
+  panel.innerHTML = `
+    <div class="item-edit-card">
+      <div class="edit-header">
+        <h3>${item.emoji || ''} ${item.name}</h3>
+        <button class="edit-back" onclick="closeItemEditor()"><i class="fas fa-arrow-left"></i> Back</button>
+      </div>
+      <div class="edit-row">
+        <div class="form-group"><label>Item Name</label><input type="text" id="edit-name" value="${item.name}"></div>
+        <div class="form-group"><label>Emoji</label><input type="text" id="edit-emoji" value="${item.emoji || ''}"></div>
+      </div>
+      <div class="edit-row">
+        <div class="form-group">
+          <label>Category</label>
+          <select id="edit-category">
+            <option value="general" ${cat === 'general' ? 'selected' : ''}>General</option>
+            <option value="dosa" ${cat === 'dosa' ? 'selected' : ''}>Dosa</option>
+            <option value="beverages" ${cat === 'beverages' ? 'selected' : ''}>Beverages</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Full Plate Price (₹)</label><input type="number" id="edit-price" value="${item.price}"></div>
+      </div>
+      <div class="edit-row">
+        <div class="form-group"><label>Half Plate Price (₹)</label><input type="number" id="edit-halfPrice" value="${item.halfPrice || 0}"></div>
+        <div class="form-group"><label>Full Plate Pieces</label><input type="text" id="edit-fullPieces" value="${item.fullPieces || ''}" placeholder="e.g., 4 pc"></div>
+      </div>
+      <div class="edit-row">
+        <div class="form-group"><label>Half Plate Pieces</label><input type="text" id="edit-halfPieces" value="${item.halfPieces || ''}" placeholder="e.g., 2 pc"></div>
+        <div></div>
+      </div>
+      <div class="checkbox-row">
+        <label><input type="checkbox" id="edit-halfPlate" ${item.halfPlate ? 'checked' : ''}> Half Plate eligible</label>
+        <label><input type="checkbox" id="edit-mixEligible" ${item.mixEligible ? 'checked' : ''}> Mix Plate eligible</label>
+      </div>
+      <div class="edit-actions">
+        <button class="btn btn-success" onclick="saveMenuItem('${id}')"><i class="fas fa-save"></i> Save Changes</button>
+      </div>
+    </div>
+  `;
+}
+function closeItemEditor() {
+  document.getElementById('edit-item-panel').innerHTML = '';
+  document.getElementById('edit-menu-search').value = '';
+  document.getElementById('edit-menu-search').focus();
+}
+async function saveMenuItem(id) {
+  const updates = {
+    name: document.getElementById('edit-name').value.trim(),
+    emoji: document.getElementById('edit-emoji').value.trim(),
+    price: parseInt(document.getElementById('edit-price').value) || 0,
+    halfPrice: parseInt(document.getElementById('edit-halfPrice').value) || 0,
+    fullPieces: document.getElementById('edit-fullPieces').value.trim(),
+    halfPieces: document.getElementById('edit-halfPieces').value.trim(),
+    halfPlate: document.getElementById('edit-halfPlate').checked,
+    mixEligible: document.getElementById('edit-mixEligible').checked,
+    category: document.getElementById('edit-category').value
+  };
+  const res = await fetch(`${API}/menu/item/${id}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(updates)
+  });
+  if (res.ok) {
+    toast('Item saved!', 'success');
+    await loadMenu();
+    closeItemEditor();
+  } else {
+    toast('Save failed', 'error');
+  }
+}
+
+// ADMIN PANEL
+async function loadAdminInfo() {
+  const res = await fetch(`${API}/settings`);
+  const data = await res.json();
+  document.getElementById('admin-current-user').value = data.adminUsername;
+}
+async function updateAdmin() {
+  const oldPassword = document.getElementById('admin-old-pass').value;
+  const username = document.getElementById('admin-new-user').value.trim();
+  const newPassword = document.getElementById('admin-new-pass').value;
+  const confirmPassword = document.getElementById('admin-confirm-pass').value;
+
+  if (!oldPassword) { toast('Please enter your current password', 'error'); return; }
+  if (newPassword && newPassword !== confirmPassword) {
+    toast('New passwords do not match', 'error'); return;
+  }
+  if (newPassword && newPassword.length < 4) {
+    toast('Password must be at least 4 characters', 'error'); return;
+  }
+  if (!username && !newPassword) {
+    toast('Nothing to update', 'error'); return;
+  }
+
+  const body = { oldPassword };
+  if (username) body.username = username;
+  if (newPassword) body.newPassword = newPassword;
+
+  const res = await fetch(`${API}/settings/admin`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body)
+  });
+  const data = await res.json();
+  if (res.ok) {
+    toast('Credentials updated!', 'success');
+    document.getElementById('admin-old-pass').value = '';
+    document.getElementById('admin-new-user').value = '';
+    document.getElementById('admin-new-pass').value = '';
+    document.getElementById('admin-confirm-pass').value = '';
+    loadAdminInfo();
+  } else {
+    toast(data.message || 'Update failed', 'error');
+  }
+}
+
+// BACKUP — Locked behind password verification
+function lockBackup() {
+  BACKUP_UNLOCKED = false;
+  const lockEl = document.getElementById('backup-lock');
+  const contentEl = document.getElementById('backup-content-wrapper');
+  const passEl = document.getElementById('backup-pass');
+  const errEl = document.getElementById('backup-error');
+  if (lockEl) lockEl.classList.remove('hidden');
+  if (contentEl) contentEl.classList.add('hidden');
+  if (passEl) passEl.value = '';
+  if (errEl) errEl.style.display = 'none';
+}
+async function verifyBackupAccess() {
+  const password = document.getElementById('backup-pass').value;
+  const errEl = document.getElementById('backup-error');
+  if (!password) {
+    errEl.textContent = 'Please enter the password';
+    errEl.style.display = 'block';
+    return;
+  }
+  try {
+    const res = await fetch(`${API}/verify-password`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password })
+    });
+    if (res.ok) {
+      BACKUP_UNLOCKED = true;
+      document.getElementById('backup-lock').classList.add('hidden');
+      document.getElementById('backup-content-wrapper').classList.remove('hidden');
+      errEl.style.display = 'none';
+      loadBackup();
+    } else {
+      errEl.textContent = 'Incorrect password';
+      errEl.style.display = 'block';
+      document.getElementById('backup-pass').value = '';
+    }
+  } catch (e) {
+    errEl.textContent = 'Cannot connect to backend';
+    errEl.style.display = 'block';
+  }
+}
+async function loadBackup() {
+  if (!BACKUP_UNLOCKED) return;
+  const date = document.getElementById('backup-date').value;
+  if (!date) return;
+  const res = await fetch(`${API}/backup/${date}`);
+  const data = await res.json();
+  const el = document.getElementById('backup-content');
+  const itemsHtml = data.items.map(i => `<tr><td>${i.name}</td><td>${i.quantity}</td><td>₹${i.revenue}</td></tr>`).join('');
+  el.innerHTML = `
+    <div class="stats-grid" style="margin-top:15px;">
+      <div class="stat-card"><div class="stat-label">Total Sales</div><div class="stat-value">₹${data.totalSales}</div></div>
+      <div class="stat-card green"><div class="stat-label">Cash</div><div class="stat-value">₹${data.cashSales}</div></div>
+      <div class="stat-card purple"><div class="stat-label">UPI</div><div class="stat-value">₹${data.upiSales}</div></div>
+      <div class="stat-card blue"><div class="stat-label">Orders</div><div class="stat-value">${data.totalOrders}</div></div>
+    </div>
+    <table class="data-table" style="margin-top:15px;">
+      <thead><tr><th>Item</th><th>Plates</th><th>Revenue</th></tr></thead>
+      <tbody>${itemsHtml || '<tr><td colspan="3" class="empty-state">No sales</td></tr>'}</tbody>
+    </table>
+  `;
+}
+
+// TOAST
+function toast(msg, type) {
+  const t = document.createElement('div');
+  t.className = 'toast ' + (type || '');
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 2500);
+}
+
+// STARTUP
+window.onload = function() {
+  if (sessionStorage.getItem('pos_logged_in') === 'true') {
+    CURRENT_USER = sessionStorage.getItem('pos_user') || 'admin';
+    document.getElementById('login-screen').classList.add('hidden');
+    document.getElementById('main-app').classList.remove('hidden');
+    loadMenu().then(() => showPage('menu'));
+  }
+};
+</script>
+</body>
+</html>

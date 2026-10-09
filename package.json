@@ -1,0 +1,12 @@
+{
+  "name": "tiffin-pos",
+  "version": "2.0.0",
+  "description": "Tiffin POS - Vercel + Supabase",
+  "type": "commonjs",
+  "scripts": {
+    "migrate": "node scripts/migrate.js"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.45.0"
+  }
+}

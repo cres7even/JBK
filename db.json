@@ -1,0 +1,392 @@
+{
+  "orders": [
+    {
+      "token": 1,
+      "date": "2026-09-24",
+      "createdAt": "16:14:08 IST",
+      "updatedAt": "16:22:29 IST",
+      "customer": "Walk-in",
+      "items": [
+        {
+          "id": "g4",
+          "name": "Gee Karam Idli",
+          "emoji": "🍚",
+          "price": 70,
+          "quantity": 1,
+          "plateType": "Full"
+        },
+        {
+          "id": "g2-half",
+          "name": "Half Wada",
+          "emoji": "🍩",
+          "price": 25,
+          "quantity": 1,
+          "plateType": "Half"
+        },
+        {
+          "id": "g1-half",
+          "name": "Half Idli",
+          "emoji": "🍚",
+          "price": 25,
+          "quantity": 1,
+          "plateType": "Half"
+        }
+      ],
+      "payment": "UPI",
+      "total": 120,
+      "cancelled": true,
+      "cancelledAt": "16:22:29 IST"
+    },
+    {
+      "token": 2,
+      "date": "2026-09-24",
+      "createdAt": "16:19:20 IST",
+      "updatedAt": "16:22:25 IST",
+      "customer": "Walk-in",
+      "items": [
+        {
+          "id": "g1-half",
+          "name": "Half Idli",
+          "emoji": "🍚",
+          "price": 25,
+          "quantity": 1,
+          "plateType": "Half"
+        },
+        {
+          "id": "g3-half",
+          "name": "Half Mysore Bonda",
+          "emoji": "🥔",
+          "price": 25,
+          "quantity": 1,
+          "plateType": "Half"
+        }
+      ],
+      "payment": "Cash",
+      "total": 50,
+      "cancelled": true,
+      "cancelledAt": "16:22:25 IST"
+    },
+    {
+      "token": 3,
+      "date": "2026-09-28",
+      "createdAt": "19:42:49 IST",
+      "updatedAt": "19:42:49 IST",
+      "customer": "Walk-in",
+      "items": [
+        {
+          "id": "g1",
+          "name": "Idli",
+          "emoji": "🍚",
+          "price": 40,
+          "quantity": 1,
+          "plateType": "Full"
+        }
+      ],
+      "payment": "Cash",
+      "total": 40,
+      "cancelled": false,
+      "cancelledAt": null
+    }
+  ],
+  "menu": {
+    "general": [
+      {
+        "id": "g1",
+        "name": "Idli",
+        "price": 40,
+        "emoji": "🍚",
+        "halfPlate": true,
+        "halfPrice": 25,
+        "halfPieces": "2 pc",
+        "fullPieces": "4 pc",
+        "mixEligible": true
+      },
+      {
+        "id": "g2",
+        "name": "Wada",
+        "price": 40,
+        "emoji": "🍩",
+        "halfPlate": true,
+        "halfPrice": 25,
+        "halfPieces": "1 pc",
+        "fullPieces": "2 pc",
+        "mixEligible": true
+      },
+      {
+        "id": "g3",
+        "name": "Mysore Bonda",
+        "price": 40,
+        "emoji": "🥔",
+        "halfPlate": true,
+        "halfPrice": 25,
+        "halfPieces": "2 pc",
+        "fullPieces": "4 pc",
+        "mixEligible": true
+      },
+      {
+        "id": "g4",
+        "name": "Gee Karam Idli",
+        "price": 70,
+        "emoji": "🍚",
+        "halfPlate": false,
+        "halfPrice": 0,
+        "mixEligible": false
+      },
+      {
+        "id": "g5",
+        "name": "Butter Fried Idli",
+        "price": 70,
+        "emoji": "🧈",
+        "halfPlate": false,
+        "halfPrice": 0,
+        "mixEligible": false
+      },
+      {
+        "id": "g6",
+        "name": "Butter Fried Wada",
+        "price": 70,
+        "emoji": "🧈",
+        "halfPlate": false,
+        "halfPrice": 0,
+        "mixEligible": false
+      },
+      {
+        "id": "g7",
+        "name": "Butter Fried Mysore Bonda",
+        "price": 70,
+        "emoji": "🧈",
+        "halfPlate": false,
+        "halfPrice": 0,
+        "mixEligible": false
+      },
+      {
+        "id": "g8",
+        "name": "Dal Poori",
+        "price": 50,
+        "emoji": "🫓",
+        "halfPlate": true,
+        "halfPrice": 30,
+        "halfPieces": "2 pc",
+        "fullPieces": "4 pc",
+        "mixEligible": true
+      },
+      {
+        "id": "g9",
+        "name": "Khorma Poori",
+        "price": 60,
+        "emoji": "🫓",
+        "halfPlate": true,
+        "halfPrice": 30,
+        "halfPieces": "2 pc",
+        "fullPieces": "4 pc",
+        "mixEligible": true
+      },
+      {
+        "id": "g10",
+        "name": "Uttapam",
+        "price": 60,
+        "emoji": "🥞",
+        "halfPlate": false,
+        "halfPrice": 0,
+        "mixEligible": false
+      },
+      {
+        "id": "g11",
+        "name": "Special Uttapam",
+        "price": 90,
+        "emoji": "🥞",
+        "halfPlate": false,
+        "halfPrice": 0,
+        "mixEligible": false
+      },
+      {
+        "id": "g12",
+        "name": "Upma",
+        "price": 40,
+        "emoji": "🍲",
+        "halfPlate": true,
+        "halfPrice": 25,
+        "halfPieces": "2 pc",
+        "fullPieces": "4 pc",
+        "mixEligible": true
+      }
+    ],
+    "dosa": [
+      {
+        "id": "d1",
+        "name": "Plain Dosa",
+        "price": 35,
+        "emoji": "🥞",
+        "halfPlate": false,
+        "mixEligible": false
+      },
+      {
+        "id": "d2",
+        "name": "Masala Dosa",
+        "price": 40,
+        "emoji": "🥞",
+        "halfPlate": false,
+        "mixEligible": false
+      },
+      {
+        "id": "d3",
+        "name": "Butter Plain Dosa",
+        "price": 60,
+        "emoji": "🧈",
+        "halfPlate": false,
+        "mixEligible": false
+      },
+      {
+        "id": "d4",
+        "name": "Plain Aloo Dosa",
+        "price": 40,
+        "emoji": "🥔",
+        "halfPlate": false,
+        "mixEligible": false
+      },
+      {
+        "id": "d5",
+        "name": "Onion Dosa",
+        "price": 40,
+        "emoji": "🧅",
+        "halfPlate": false,
+        "mixEligible": false
+      },
+      {
+        "id": "d6",
+        "name": "Gee Karam Dosa",
+        "price": 70,
+        "emoji": "🥞",
+        "halfPlate": false,
+        "mixEligible": false
+      },
+      {
+        "id": "d7",
+        "name": "Gee Masala Dosa",
+        "price": 70,
+        "emoji": "🥞",
+        "halfPlate": false,
+        "mixEligible": false
+      },
+      {
+        "id": "d8",
+        "name": "Butter Masala Dosa",
+        "price": 70,
+        "emoji": "🧈",
+        "halfPlate": false,
+        "mixEligible": false
+      },
+      {
+        "id": "d9",
+        "name": "Butter Paneer Dosa",
+        "price": 90,
+        "emoji": "🧈",
+        "halfPlate": false,
+        "mixEligible": false
+      },
+      {
+        "id": "d10",
+        "name": "Butter Cheese Dosa",
+        "price": 90,
+        "emoji": "🧀",
+        "halfPlate": false,
+        "mixEligible": false
+      },
+      {
+        "id": "d11",
+        "name": "Banana Dosa",
+        "price": 60,
+        "emoji": "🍌",
+        "halfPlate": false,
+        "mixEligible": false
+      },
+      {
+        "id": "d12",
+        "name": "Rawa Dosa",
+        "price": 65,
+        "emoji": "🥞",
+        "halfPlate": false,
+        "mixEligible": false
+      },
+      {
+        "id": "d13",
+        "name": "Rawa Onion Dosa",
+        "price": 75,
+        "emoji": "🧅",
+        "halfPlate": false,
+        "mixEligible": false
+      },
+      {
+        "id": "d14",
+        "name": "Rawa Masala Dosa",
+        "price": 75,
+        "emoji": "🥞",
+        "halfPlate": false,
+        "mixEligible": false
+      },
+      {
+        "id": "d15",
+        "name": "Pesarattu Plain Dosa",
+        "price": 50,
+        "emoji": "🥞",
+        "halfPlate": false,
+        "mixEligible": false
+      },
+      {
+        "id": "d16",
+        "name": "Pesarattu Masala Dosa",
+        "price": 60,
+        "emoji": "🥞",
+        "halfPlate": false,
+        "mixEligible": false
+      },
+      {
+        "id": "d17",
+        "name": "Signature Dosa",
+        "price": 120,
+        "emoji": "⭐",
+        "halfPlate": false,
+        "mixEligible": false
+      }
+    ],
+    "beverages": [
+      {
+        "id": "b1",
+        "name": "Water Bottle",
+        "price": 20,
+        "emoji": "💧",
+        "halfPlate": false,
+        "mixEligible": false
+      },
+      {
+        "id": "b2",
+        "name": "Tea",
+        "price": 15,
+        "emoji": "☕",
+        "halfPlate": false,
+        "mixEligible": false
+      },
+      {
+        "id": "b3",
+        "name": "Coffee",
+        "price": 20,
+        "emoji": "☕",
+        "halfPlate": false,
+        "mixEligible": false
+      },
+      {
+        "id": "b4",
+        "name": "Cool Drink",
+        "price": 30,
+        "emoji": "🥤",
+        "halfPlate": false,
+        "mixEligible": false
+      }
+    ]
+  },
+  "settings": {
+    "adminUsername": "admin",
+    "adminPassword": "tiffin123",
+    "nextTokenNumber": 4
+  }
+}

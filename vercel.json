@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "rewrites": [
+    { "source": "/", "destination": "/pos.html" },
+    { "source": "/api/orders/today", "destination": "/api/orders-today" },
+    { "source": "/api/orders/:token/cancel", "destination": "/api/order-cancel?token=:token" },
+    { "source": "/api/orders/:token", "destination": "/api/order-update?token=:token" },
+    { "source": "/api/menu/item/:id", "destination": "/api/menu-item?id=:id" },
+    { "source": "/api/backup/:date", "destination": "/api/backup?date=:date" }
+  ]
+}
