@@ -6,6 +6,7 @@ module.exports = async (req, res) => {
   const { data, error } = await supabase
     .from('menu_items')
     .select('*')
+    .eq('active', true)
     .order('sort_order', { ascending: true });
 
   if (error) return json(res, 500, { error: error.message });
@@ -21,7 +22,9 @@ module.exports = async (req, res) => {
       halfPrice: row.half_price,
       halfPieces: row.half_pieces || '',
       fullPieces: row.full_pieces || '',
-      mixEligible: row.mix_eligible
+      mixEligible: row.mix_eligible,
+      altEligible: row.alt_eligible,
+      piecePrice: row.piece_price || 0
     };
     if (!item.halfPlate) { delete item.halfPieces; delete item.fullPieces; }
     if (!menu[row.category]) menu[row.category] = [];
