@@ -17,6 +17,8 @@ module.exports = async (req, res) => {
   if (body.fullPieces !== undefined) update.full_pieces = body.fullPieces;
   if (body.halfPlate !== undefined) update.half_plate = body.halfPlate;
   if (body.mixEligible !== undefined) update.mix_eligible = body.mixEligible;
+  if (body.altEligible !== undefined) update.alt_eligible = body.altEligible;
+  if (body.piecePrice !== undefined) update.piece_price = body.piecePrice;
   if (body.category !== undefined) update.category = body.category;
   update.updated_at = new Date().toISOString();
 

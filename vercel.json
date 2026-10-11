@@ -5,7 +5,10 @@
     { "source": "/api/orders/today", "destination": "/api/orders-today" },
     { "source": "/api/orders/:token/cancel", "destination": "/api/order-cancel?token=:token" },
     { "source": "/api/orders/:token", "destination": "/api/order-update?token=:token" },
+    { "source": "/api/menu/item", "destination": "/api/menu-item-create" },
     { "source": "/api/menu/item/:id", "destination": "/api/menu-item?id=:id" },
+    { "source": "/api/menu/item/:id/delete", "destination": "/api/menu-item-delete?id=:id" },
+    { "source": "/api/settings/prices", "destination": "/api/settings-prices" },
     { "source": "/api/backup/:date", "destination": "/api/backup?date=:date" }
   ]
 }
