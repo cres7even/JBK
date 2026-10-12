@@ -26,7 +26,7 @@ module.exports = async (req, res) => {
       altEligible: row.alt_eligible,
       piecePrice: row.piece_price || 0
     };
-    if (!item.halfPlate) { delete item.halfPieces; delete item.fullPieces; }
+    if (!item.halfPlate) { delete item.halfPieces; }
     if (!menu[row.category]) menu[row.category] = [];
     menu[row.category].push(item);
   }

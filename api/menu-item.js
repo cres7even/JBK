@@ -4,15 +4,32 @@ module.exports = async (req, res) => {
   const id = req.query.id || (req.url.split('/').filter(Boolean).pop() || '').split('?')[0];
   const action = req.query.action; // 'create' | 'delete' | undefined
 
+  // ---------- DELETE = soft-delete item ----------
+  if (req.method === 'DELETE') {
+    if (!id) return json(res, 400, { error: 'Missing item id' });
+    const { error } = await supabase
+      .from('menu_items')
+      .update({ active: false, updated_at: new Date().toISOString() })
+      .eq('id', id);
+    if (error) return json(res, 500, { error: error.message });
+    return json(res, 200, { success: true });
+  }
+
   // ---------- POST = create new item ----------
   if (req.method === 'POST') {
     const body = await readBody(req);
-    if (!body.id || !body.name || !body.category) {
-      return json(res, 400, { error: 'Missing id, name, or category' });
+    if (!body.name || !body.category) {
+      return json(res, 400, { error: 'Missing name or category' });
     }
 
+    const prefix = body.category === 'dosa' ? 'd' : (body.category === 'beverages' ? 'b' : 'g');
+    const cleanName = (body.name || '').toLowerCase().replace(/[^a-z0-9]/g, '').slice(0, 8);
+    const itemId = (body.id && String(body.id).trim())
+      ? String(body.id).trim()
+      : `${prefix}_${cleanName || 'item'}_${Date.now().toString(36)}`;
+
     const { data: existing } = await supabase
-      .from('menu_items').select('id, active').eq('id', body.id).maybeSingle();
+      .from('menu_items').select('id, active').eq('id', itemId).maybeSingle();
 
     if (existing && existing.active) {
       return json(res, 409, { error: 'Item id already exists' });
@@ -34,7 +51,7 @@ module.exports = async (req, res) => {
         active: true,
         updated_at: new Date().toISOString()
       };
-      const { error } = await supabase.from('menu_items').update(update).eq('id', body.id);
+      const { error } = await supabase.from('menu_items').update(update).eq('id', itemId);
       if (error) return json(res, 500, { error: error.message });
       return json(res, 200, { success: true, reactivated: true });
     }
@@ -45,7 +62,7 @@ module.exports = async (req, res) => {
     const sortOrder = maxRows && maxRows[0] ? (maxRows[0].sort_order || 0) + 1 : 0;
 
     const newItem = {
-      id: body.id,
+      id: itemId,
       name: body.name,
       price: body.price || 0,
       emoji: body.emoji || '',
