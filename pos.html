@@ -1,10 +1,3 @@
-Here is the complete, updated `pos.html` file. The 4 summary cards have been completely removed from the Sales page, but they still exist in the Backup tab. Everything else (Neon theme, Mix/Alt plates) remains exactly the same.
-
-**Path:** `C:\Users\windows\Desktop\jbk\pos.html`
-
-Copy all of this, replace the entire content of your `pos.html`, save, and push:
-
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -341,7 +334,7 @@ input, select { font-family: inherit; outline: none; }
 .cart-total-label { font-size: 15px; font-weight: 600; color: var(--secondary); }
 .cart-total-value { font-size: 22px; font-weight: 700; color: var(--primary); }
 
-/* PUNCH BUTTON */
+/* PUNCH BUTTON — neon */
 .punch-btn {
   width: 100%; padding: 16px;
   background: linear-gradient(180deg, #2ee68a 0%, var(--success) 100%);
@@ -824,7 +817,7 @@ input, select { font-family: inherit; outline: none; }
       <h1 class="page-title"><i class="fas fa-chart-line"></i> Sales Dashboard</h1>
       <p class="page-subtitle" id="sales-date-label"></p>
       
-      <!-- SUMMARY CARDS REMOVED HERE -->
+      <!-- REMOVED: stats-grid from here as requested previously -->
 
       <div class="card">
         <div class="card-header">
@@ -847,26 +840,105 @@ input, select { font-family: inherit; outline: none; }
     <div class="container">
       <h1 class="page-title"><i class="fas fa-cog"></i> Settings</h1>
       <div class="settings-tabs">
-        <button class="settings-tab active" onclick="switchSettingsTab('menu', event)"><i class="fas fa-utensils"></i> Edit Menu</button>
+        <button class="settings-tab active" onclick="switchSettingsTab('menu', event)"><i class="fas fa-book-open"></i> Menu</button>
         <button class="settings-tab" onclick="switchSettingsTab('admin', event)"><i class="fas fa-user-shield"></i> Admin Panel</button>
         <button class="settings-tab" onclick="switchSettingsTab('backup', event)"><i class="fas fa-download"></i> Backup</button>
       </div>
 
+      <!-- NEW MENU MANAGEMENT SECTION -->
       <div id="settings-menu" class="settings-tab-content active">
-        <div class="card">
-          <div class="card-body">
-            <p style="color:var(--text-light);font-size:13px;margin-bottom:15px;">
-              <i class="fas fa-info-circle"></i> Type an item name below. Click the result to edit its details.
-            </p>
-            <div class="search-edit-box">
-              <i class="fas fa-search search-icon"></i>
-              <input type="text" id="edit-menu-search" placeholder="Search menu item (e.g., Idli, Masala Dosa)..." oninput="searchMenuEditor()">
+        <!-- Sub-menu view -->
+        <div id="menu-main-view">
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 10px;">
+            <button class="card btn-primary" style="padding: 30px; text-align: center; border-radius: 12px; border: none;" onclick="showMenuSubTab('add')">
+              <i class="fas fa-plus-circle" style="font-size: 40px; margin-bottom: 15px;"></i>
+              <div style="font-size: 18px; font-weight: 700;">Add Menu</div>
+              <div style="font-size: 12px; opacity: 0.9;">Create a new item</div>
+            </button>
+            <button class="card btn-success" style="padding: 30px; text-align: center; border-radius: 12px; border: none;" onclick="showMenuSubTab('edit')">
+              <i class="fas fa-edit" style="font-size: 40px; margin-bottom: 15px;"></i>
+              <div style="font-size: 18px; font-weight: 700;">Edit Menu</div>
+              <div style="font-size: 12px; opacity: 0.9;">Modify existing items</div>
+            </button>
+            <button class="card btn-danger" style="padding: 30px; text-align: center; border-radius: 12px; border: none;" onclick="showMenuSubTab('delete')">
+              <i class="fas fa-trash-alt" style="font-size: 40px; margin-bottom: 15px;"></i>
+              <div style="font-size: 18px; font-weight: 700;">Delete Menu</div>
+              <div style="font-size: 12px; opacity: 0.9;">Remove items from POS</div>
+            </button>
+          </div>
+        </div>
+
+        <!-- Add View -->
+        <div id="menu-add-view" class="hidden">
+          <button class="edit-back" onclick="showMenuSubTab('main')" style="margin-bottom: 15px;"><i class="fas fa-arrow-left"></i> Back</button>
+          <div class="card">
+            <div class="card-header"><span><i class="fas fa-plus"></i> Add New Menu Item</span></div>
+            <div class="card-body">
+              <div class="edit-row">
+                <div class="form-group"><label>Item Name</label><input type="text" id="add-name" placeholder="e.g. Rawa Dosa"></div>
+                <div class="form-group"><label>Emoji</label><input type="text" id="add-emoji" placeholder="e.g. 🥞"></div>
+              </div>
+              <div class="edit-row">
+                <div class="form-group">
+                  <label>Category</label>
+                  <select id="add-category">
+                    <option value="general">General</option>
+                    <option value="dosa">Dosa</option>
+                    <option value="beverages">Beverages</option>
+                  </select>
+                </div>
+                <div class="form-group"><label>Full Plate Price (₹)</label><input type="number" id="add-price" placeholder="0"></div>
+              </div>
+              <div class="edit-row">
+                <div class="form-group"><label>Half Plate Price (₹)</label><input type="number" id="add-halfPrice" placeholder="0"></div>
+                <div class="form-group"><label>Per Piece Price (₹)</label><input type="number" id="add-piecePrice" placeholder="0"></div>
+              </div>
+              <div class="edit-row">
+                <div class="form-group"><label>Full Plate Pieces</label><input type="text" id="add-fullPieces" placeholder="e.g. 4 pc"></div>
+                <div class="form-group"><label>Half Plate Pieces</label><input type="text" id="add-halfPieces" placeholder="e.g. 2 pc"></div>
+              </div>
+              <div class="checkbox-row">
+                <label><input type="checkbox" id="add-halfPlate"> Half Plate eligible</label>
+                <label><input type="checkbox" id="add-mixEligible"> Mix Plate eligible</label>
+                <label><input type="checkbox" id="add-altEligible"> Alternate Plate eligible</label>
+              </div>
+              <div class="edit-actions">
+                <button class="btn btn-success" onclick="saveNewMenuItem()"><i class="fas fa-save"></i> Add Item</button>
+              </div>
             </div>
-            <div id="edit-search-results" class="search-results hidden"></div>
-            <div id="edit-item-panel"></div>
+          </div>
+        </div>
+
+        <!-- Edit View -->
+        <div id="menu-edit-view" class="hidden">
+          <button class="edit-back" onclick="showMenuSubTab('main')" style="margin-bottom: 15px;"><i class="fas fa-arrow-left"></i> Back</button>
+          <div class="card">
+            <div class="card-body">
+              <div class="search-edit-box">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" id="edit-menu-search" placeholder="Search menu item to edit..." oninput="searchMenuEditor()">
+              </div>
+              <div id="edit-search-results" class="search-results hidden"></div>
+              <div id="edit-item-panel"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Delete View -->
+        <div id="menu-delete-view" class="hidden">
+          <button class="edit-back" onclick="showMenuSubTab('main')" style="margin-bottom: 15px;"><i class="fas fa-arrow-left"></i> Back</button>
+          <div class="card">
+            <div class="card-body">
+              <div class="search-edit-box">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" id="delete-menu-search" placeholder="Search menu item to delete..." oninput="searchMenuDelete()">
+              </div>
+              <div id="delete-search-results" class="search-results hidden"></div>
+            </div>
           </div>
         </div>
       </div>
+      <!-- END NEW MENU MANAGEMENT SECTION -->
 
       <div id="settings-admin" class="settings-tab-content">
         <div class="card">
@@ -1390,8 +1462,7 @@ function closeModal() { document.getElementById('modal-container').innerHTML = '
 async function loadSales() {
   const res = await fetch(`${API}/orders/today`);
   const orders = await res.json();
-  
-  // Summary card updates REMOVED
+  const active = orders.filter(o => !o.cancelled);
   
   const today = new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' });
   document.getElementById('sales-date-label').textContent = 'Today — ' + today;
@@ -1522,6 +1593,7 @@ function switchSettingsTab(tab, event) {
   document.querySelectorAll('.settings-tab-content').forEach(c => c.classList.remove('active'));
   if (event) event.target.classList.add('active');
   document.getElementById('settings-' + tab).classList.add('active');
+  if (tab === 'menu') showMenuSubTab('main');
   if (tab === 'admin') loadAdminInfo();
   if (tab === 'backup') {
     lockBackup();
@@ -1529,6 +1601,84 @@ function switchSettingsTab(tab, event) {
     if (!bd.value) bd.value = new Date().toISOString().split('T')[0];
   }
 }
+
+// ============================================================
+// SETTINGS -> MENU MANAGEMENT
+// ============================================================
+function showMenuSubTab(subtab) {
+  document.getElementById('menu-main-view').classList.add('hidden');
+  document.getElementById('menu-add-view').classList.add('hidden');
+  document.getElementById('menu-edit-view').classList.add('hidden');
+  document.getElementById('menu-delete-view').classList.add('hidden');
+
+  if (subtab === 'main') document.getElementById('menu-main-view').classList.remove('hidden');
+  if (subtab === 'add') document.getElementById('menu-add-view').classList.remove('hidden');
+  if (subtab === 'edit') document.getElementById('menu-edit-view').classList.remove('hidden');
+  if (subtab === 'delete') document.getElementById('menu-delete-view').classList.remove('hidden');
+  
+  if (subtab === 'main') {
+    document.getElementById('edit-menu-search').value = '';
+    document.getElementById('edit-search-results').classList.add('hidden');
+    document.getElementById('edit-item-panel').innerHTML = '';
+  }
+  if (subtab === 'delete') {
+    document.getElementById('delete-menu-search').value = '';
+    document.getElementById('delete-search-results').classList.add('hidden');
+  }
+}
+
+// 1. ADD MENU
+async function saveNewMenuItem() {
+  const name = document.getElementById('add-name').value.trim();
+  if (!name) { toast('Item name is required', 'error'); return; }
+  
+  const category = document.getElementById('add-category').value;
+  const id = category.charAt(0) + Date.now().toString().slice(-4); // e.g. g1234
+  
+  const payload = {
+    id: id,
+    name: name,
+    emoji: document.getElementById('add-emoji').value.trim(),
+    category: category,
+    price: parseInt(document.getElementById('add-price').value) || 0,
+    halfPrice: parseInt(document.getElementById('add-halfPrice').value) || 0,
+    piecePrice: parseInt(document.getElementById('add-piecePrice').value) || 0,
+    fullPieces: document.getElementById('add-fullPieces').value.trim(),
+    halfPieces: document.getElementById('add-halfPieces').value.trim(),
+    halfPlate: document.getElementById('add-halfPlate').checked,
+    mixEligible: document.getElementById('add-mixEligible').checked,
+    altEligible: document.getElementById('add-altEligible').checked
+  };
+
+  const btn = event.target;
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+
+  try {
+    const res = await fetch(`${API}/menu/item`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    if (res.ok) {
+      toast('Item added successfully!', 'success');
+      await loadMenu();
+      showMenuSubTab('main');
+      // Clear form
+      ['add-name','add-emoji','add-price','add-halfPrice','add-piecePrice','add-fullPieces','add-halfPieces'].forEach(id => document.getElementById(id).value = '');
+      ['add-halfPlate','add-mixEligible','add-altEligible'].forEach(id => document.getElementById(id).checked = false);
+    } else {
+      const err = await res.json();
+      toast(err.error || 'Failed to add item', 'error');
+    }
+  } catch (e) {
+    toast('Network error', 'error');
+  }
+  btn.disabled = false;
+  btn.innerHTML = '<i class="fas fa-save"></i> Add Item';
+}
+
+// 2. EDIT MENU
 function searchMenuEditor() {
   const q = document.getElementById('edit-menu-search').value.toLowerCase().trim();
   const resultsEl = document.getElementById('edit-search-results');
@@ -1588,7 +1738,7 @@ function openItemEditor(id) {
       </div>
       <div class="edit-row">
         <div class="form-group"><label>Half Plate Pieces</label><input type="text" id="edit-halfPieces" value="${item.halfPieces || ''}" placeholder="e.g., 2 pc"></div>
-        <div class="form-group"><label>Piece Price (₹) — for Alternate Plate</label><input type="number" id="edit-piecePrice" value="${item.piecePrice || 0}"></div>
+        <div class="form-group"><label>Per Piece Price (₹)</label><input type="number" id="edit-piecePrice" value="${item.piecePrice || 0}"></div>
       </div>
       <div class="checkbox-row">
         <label><input type="checkbox" id="edit-halfPlate" ${item.halfPlate ? 'checked' : ''}> Half Plate eligible</label>
@@ -1629,8 +1779,54 @@ async function saveMenuItem(id) {
     toast('Item saved!', 'success');
     await loadMenu();
     closeItemEditor();
+    showMenuSubTab('main');
   } else {
     toast('Save failed', 'error');
+  }
+}
+
+// 3. DELETE MENU
+function searchMenuDelete() {
+  const q = document.getElementById('delete-menu-search').value.toLowerCase().trim();
+  const resultsEl = document.getElementById('delete-search-results');
+  if (!q) { resultsEl.classList.add('hidden'); return; }
+  
+  const all = [];
+  Object.keys(MENU).forEach(cat => MENU[cat].forEach(item => all.push({ ...item, cat })));
+  const results = all.filter(i => i.name.toLowerCase().includes(q));
+  
+  if (results.length === 0) {
+    resultsEl.innerHTML = '<div class="search-result-item" style="color:#888;">No matching items</div>';
+    resultsEl.classList.remove('hidden');
+    return;
+  }
+  
+  resultsEl.innerHTML = results.map(item => `
+    <div class="search-result-item" onclick="confirmDeleteItem('${item.id}', '${item.name}')" style="border-left: 3px solid var(--danger);">
+      <div>
+        <div class="item-name">${item.emoji || ''} ${item.name}</div>
+        <span class="item-cat">${item.cat}</span>
+      </div>
+      <div class="item-price" style="color:var(--danger);"><i class="fas fa-trash"></i></div>
+    </div>
+  `).join('');
+  resultsEl.classList.remove('hidden');
+}
+
+async function confirmDeleteItem(id, name) {
+  if (!confirm(`Are you sure you want to delete "${name}"?\n\nIt will be removed from the POS menu. Historical orders are safe.`)) return;
+  
+  try {
+    const res = await fetch(`${API}/menu/item/${id}/delete`, { method: 'PUT' });
+    if (res.ok) {
+      toast('Item deleted from menu', 'success');
+      await loadMenu();
+      searchMenuDelete(); // refresh results
+    } else {
+      toast('Failed to delete item', 'error');
+    }
+  } catch (e) {
+    toast('Network error', 'error');
   }
 }
 
@@ -1745,4 +1941,3 @@ window.onload = function() {
 </script>
 </body>
 </html>
-```
