@@ -3,8 +3,9 @@
   "rewrites": [
     { "source": "/", "destination": "/pos.html" },
     { "source": "/api/orders/today", "destination": "/api/orders-today" },
-    { "source": "/api/orders/:token/cancel", "destination": "/api/order?token=:token" },
-    { "source": "/api/orders/:token", "destination": "/api/order?token=:token" },
+    { "source": "/api/orders/:token/cancel", "destination": "/api/orders?token=:token&action=cancel" },
+    { "source": "/api/orders/:token", "destination": "/api/orders?token=:token&action=update" },
+    { "source": "/api/orders", "destination": "/api/orders" },
     { "source": "/api/menu/item/:id/delete", "destination": "/api/menu-item?id=:id&action=delete" },
     { "source": "/api/menu/item/:id", "destination": "/api/menu-item?id=:id" },
     { "source": "/api/menu/item", "destination": "/api/menu-item" },

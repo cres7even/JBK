@@ -1387,7 +1387,8 @@ async function saveEditedOrder(token, date) {
   const data = window._editOrderData;
   if (data.length === 0) { alert('Order must have at least one item'); return; }
   const payment = document.getElementById('edit-payment').value;
-  const res = await fetch(`${API}/orders/${token}?date=${date}`, {
+  
+  const res = await fetch(`${API}/orders/${token}?date=${date}&action=update`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ items: data, payment })
@@ -1397,7 +1398,7 @@ async function saveEditedOrder(token, date) {
 }
 async function cancelOrder(token, date) {
   if (!confirm(`Cancel Order #${String(token).padStart(3,'0')}?\n\nThis will mark it as cancelled but keep the record.`)) return;
-  const res = await fetch(`${API}/orders/${token}/cancel?date=${date}`, { method: 'PUT' });
+  const res = await fetch(`${API}/orders/${token}?date=${date}&action=cancel`, { method: 'PUT' });
   if (res.ok) loadSales();
   else alert('Failed to cancel');
 }
