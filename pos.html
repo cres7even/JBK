@@ -1388,13 +1388,20 @@ async function saveEditedOrder(token, date) {
   if (data.length === 0) { alert('Order must have at least one item'); return; }
   const payment = document.getElementById('edit-payment').value;
   
-  const res = await fetch(`${API}/orders/${token}?date=${date}&action=update`, {
+  // We send the token and date directly in the URL query string
+  const res = await fetch(`${API}/orders?token=${token}&date=${date}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ items: data, payment })
   });
-  if (res.ok) { closeModal(); loadSales(); }
-  else { alert('Failed to update order'); }
+  
+  if (res.ok) { 
+    closeModal(); 
+    loadSales(); 
+  } else { 
+    const err = await res.json();
+    alert('Failed to update order: ' + (err.error || 'Unknown error')); 
+  }
 }
 async function cancelOrder(token, date) {
   if (!confirm(`Cancel Order #${String(token).padStart(3,'0')}?\n\nThis will mark it as cancelled but keep the record.`)) return;

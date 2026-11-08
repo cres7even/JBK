@@ -8,7 +8,7 @@ module.exports = async (req, res) => {
     return json(res, 200, data.map(rowToOrder));
   }
 
-  // 2. POST NEW ORDER (Punch)
+  // 2. POST NEW ORDER
   if (req.method === 'POST') {
     const { items, payment, customer } = await readBody(req);
     if (!items || items.length === 0) return json(res, 400, { error: 'No items in order' });
@@ -31,25 +31,26 @@ module.exports = async (req, res) => {
     return json(res, 201, rowToOrder(order));
   }
 
-  // 3. PUT (For Edit and Cancel)
+  // 3. PUT (Edit and Cancel)
   if (req.method === 'PUT') {
     const token = parseInt(req.query.token, 10);
     const date = req.query.date;
-    if (!token || !date) return json(res, 400, { error: 'Missing token or date' });
-
+    
+    if (!token) return json(res, 400, { error: 'Missing token' });
+    
+    // If date is missing (old cache), fallback to today's date
+    const targetDate = date || getISTDateString();
     const now = getISTTimeString();
 
-    // If the request says action=cancel, we do the cancel logic
     if (req.query.action === 'cancel') {
       const { data, error } = await supabase.from('orders')
         .update({ cancelled: true, cancelled_at: now, updated_at: now })
-        .eq('token', token).eq('date', date).select().single();
+        .eq('token', token).eq('date', targetDate).select().single();
       
       if (error) return json(res, 500, { error: error.message });
       return json(res, 200, { token: data.token, cancelled: data.cancelled, cancelledAt: data.cancelled_at });
     }
 
-    // Otherwise, it's an Edit (update items)
     const { items, payment } = await readBody(req);
     if (!items || items.length === 0) return json(res, 400, { error: 'No items' });
 
@@ -58,7 +59,7 @@ module.exports = async (req, res) => {
     if (payment) update.payment = payment;
 
     const { data, error } = await supabase.from('orders')
-      .update(update).eq('token', token).eq('date', date).select().single();
+      .update(update).eq('token', token).eq('date', targetDate).select().single();
       
     if (error) return json(res, 500, { error: error.message });
     return json(res, 200, rowToOrder(data));
