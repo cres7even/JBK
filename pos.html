@@ -1398,9 +1398,18 @@ async function saveEditedOrder(token, date) {
 }
 async function cancelOrder(token, date) {
   if (!confirm(`Cancel Order #${String(token).padStart(3,'0')}?\n\nThis will mark it as cancelled but keep the record.`)) return;
-  const res = await fetch(`${API}/orders/${token}?date=${date}&action=cancel`, { method: 'PUT' });
-  if (res.ok) loadSales();
-  else alert('Failed to cancel');
+  
+  // Notice we are sending ?token=...&date=...&action=cancel
+  const res = await fetch(`${API}/orders?token=${token}&date=${date}&action=cancel`, { 
+    method: 'PUT' 
+  });
+  
+  if (res.ok) {
+    loadSales();
+  } else {
+    const err = await res.json();
+    alert('Failed to cancel: ' + (err.error || 'Unknown error'));
+  }
 }
 
 function switchSettingsTab(tab, event) {
