@@ -223,27 +223,6 @@ input, select { font-family: inherit; outline: none; }
 }
 .search-bar input:focus ~ i { color: var(--primary); }
 
-/* ============ SPECIAL PLATE ROW ============ */
-.special-plate-row {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px;
-}
-.special-plate-btn {
-  background: linear-gradient(135deg, #fff 0%, #fff7f0 100%);
-  border: 2px dashed var(--primary);
-  border-radius: var(--radius);
-  padding: 12px; font-size: 14px; font-weight: 700;
-  color: var(--primary);
-  display: flex; flex-direction: column; align-items: center; gap: 2px;
-  transition: var(--transition); cursor: pointer;
-}
-.special-plate-btn:hover {
-  background: linear-gradient(180deg, #ff8a42 0%, var(--primary) 100%);
-  color: #fff; border-style: solid;
-  box-shadow: 0 4px 16px -4px var(--primary-glow);
-}
-.special-plate-btn small { font-size: 10px; font-weight: 500; opacity: 0.8; }
-.special-plate-btn i { font-size: 20px; margin-bottom: 2px; }
-
 /* ============ ITEMS GRID ============ */
 .items-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
 .item-card {
@@ -407,56 +386,6 @@ input, select { font-family: inherit; outline: none; }
 .choice-btn .choice-title { font-size: 14px; font-weight: 700; color: var(--secondary); margin-bottom: 5px; }
 .choice-btn .choice-pieces { font-size: 12px; color: var(--text-light); margin-bottom: 8px; }
 .choice-btn .choice-price { font-size: 22px; font-weight: 700; color: var(--primary); }
-.mix-slot {
-  padding: 15px; border: 2px dashed var(--border); border-radius: var(--radius);
-  text-align: center; color: var(--text-light); font-size: 14px; margin-bottom: 10px;
-  min-height: 60px; display: flex; align-items: center; justify-content: center;
-  transition: var(--transition);
-}
-.mix-slot.filled {
-  border-style: solid; border-color: var(--primary);
-  color: var(--secondary); font-weight: 600;
-  background: rgba(255,122,43,0.04);
-  box-shadow: 0 0 20px -8px var(--primary-glow);
-}
-.mix-options { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 15px; }
-.mix-opt {
-  padding: 12px; border: 2px solid var(--border); background: #fff;
-  border-radius: var(--radius-sm); font-weight: 600; color: var(--secondary);
-  transition: var(--transition); font-size: 13px;
-}
-.mix-opt:hover { border-color: var(--primary); color: var(--primary); }
-.mix-opt.selected {
-  background: linear-gradient(180deg, #ff8a42 0%, var(--primary) 100%);
-  color: #fff; border-color: var(--primary);
-  box-shadow: 0 4px 12px -4px var(--primary-glow);
-}
-.mix-price { text-align: center; font-size: 24px; font-weight: 700; color: var(--primary); margin: 15px 0; }
-.modal-buttons { display: flex; gap: 10px; margin-top: 15px; }
-.modal-btn {
-  flex: 1; padding: 12px; border-radius: var(--radius-sm);
-  font-size: 14px; font-weight: 600; transition: var(--transition);
-}
-.modal-btn-primary {
-  background: linear-gradient(180deg, #ff8a42 0%, var(--primary) 100%);
-  color: #fff;
-  box-shadow: 0 4px 14px -4px var(--primary-glow);
-}
-.modal-btn-primary:hover:not(:disabled) { transform: translateY(-1px); }
-.modal-btn-primary:disabled { background: #cbd5e1; box-shadow: none; cursor: not-allowed; }
-.modal-btn-outline { background: #fff; color: var(--secondary); border: 2px solid var(--border); }
-.modal-btn-outline:hover { border-color: var(--secondary); }
-
-/* Alternate Plate modal */
-.alt-item-row { display: flex; align-items: center; gap: 8px; padding: 8px 0; border-bottom: 1px solid var(--border); }
-.alt-item-row:last-child { border-bottom: none; }
-.alt-item-name { flex: 1; font-weight: 600; color: var(--secondary); font-size: 13px; }
-.alt-item-price { font-size: 11px; color: var(--text-light); min-width: 60px; text-align: right; }
-.alt-total {
-  font-size: 22px; font-weight: 700; color: var(--primary);
-  text-align: center; padding: 12px 0;
-  border-top: 1px dashed var(--border); margin-top: 10px;
-}
 
 /* Token modal */
 .token-modal {
@@ -722,7 +651,6 @@ input, select { font-family: inherit; outline: none; }
   .nav-btn { flex: 1; justify-content: center; }
   .category-tabs { gap: 5px; }
   .cat-btn { padding: 10px 14px; font-size: 13px; }
-  .special-plate-row { grid-template-columns: 1fr; }
 }
 
 ::-webkit-scrollbar { width: 8px; height: 8px; }
@@ -780,16 +708,6 @@ input, select { font-family: inherit; outline: none; }
           <div class="search-bar">
             <i class="fas fa-search"></i>
             <input type="text" id="menu-search" placeholder="Search items..." oninput="searchItems()">
-          </div>
-          <div id="special-plate-row" class="special-plate-row">
-            <button class="special-plate-btn" onclick="openMixPlate()">
-              <i class="fas fa-blender"></i> Mixed Plate
-              <small>Pick exactly 2 items</small>
-            </button>
-            <button class="special-plate-btn" onclick="openAltPlate()">
-              <i class="fas fa-layer-group"></i> Alternate Plate
-              <small>Pick items by piece</small>
-            </button>
           </div>
           <div class="items-grid" id="items-grid"></div>
         </div>
@@ -853,7 +771,6 @@ input, select { font-family: inherit; outline: none; }
       </div>
 
       <div id="settings-menu" class="settings-tab-content active">
-        <!-- Sub-menu view -->
         <div id="menu-main-view">
           <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 10px;">
             <button class="card btn-primary" style="padding: 30px; text-align: center; border-radius: 12px; border: none;" onclick="showMenuSubTab('add')">
@@ -874,7 +791,6 @@ input, select { font-family: inherit; outline: none; }
           </div>
         </div>
 
-        <!-- Add View -->
         <div id="menu-add-view" class="hidden">
           <button class="edit-back" onclick="showMenuSubTab('main')" style="margin-bottom: 15px;"><i class="fas fa-arrow-left"></i> Back</button>
           <div class="card">
@@ -905,7 +821,6 @@ input, select { font-family: inherit; outline: none; }
               </div>
               <div class="checkbox-row">
                 <label><input type="checkbox" id="add-halfPlate"> Half Plate eligible</label>
-                <label><input type="checkbox" id="add-mixEligible"> Mix Plate eligible</label>
                 <label><input type="checkbox" id="add-altEligible"> Alternate Plate eligible</label>
               </div>
               <div class="edit-actions">
@@ -915,7 +830,6 @@ input, select { font-family: inherit; outline: none; }
           </div>
         </div>
 
-        <!-- Edit View -->
         <div id="menu-edit-view" class="hidden">
           <button class="edit-back" onclick="showMenuSubTab('main')" style="margin-bottom: 15px;"><i class="fas fa-arrow-left"></i> Back</button>
           <div class="card">
@@ -930,7 +844,6 @@ input, select { font-family: inherit; outline: none; }
           </div>
         </div>
 
-        <!-- Delete View -->
         <div id="menu-delete-view" class="hidden">
           <button class="edit-back" onclick="showMenuSubTab('main')" style="margin-bottom: 15px;"><i class="fas fa-arrow-left"></i> Back</button>
           <div class="card">
@@ -1020,8 +933,6 @@ let CART = [];
 let PAYMENT = 'Cash';
 let CURRENT_CATEGORY = 'general';
 let CURRENT_USER = '';
-let MIX_SELECTION = { item1: null, item2: null };
-let ALT_SELECTION = {};
 let BACKUP_UNLOCKED = false;
 let MIX_PRICES = { normal: 40, poori: 50 };
 
@@ -1104,19 +1015,13 @@ async function loadMixPrices() {
     if (data.mixPlatePooriPrice != null) MIX_PRICES.poori = data.mixPlatePooriPrice;
   } catch (e) { console.warn('Could not load mix prices', e); }
 }
-function toggleSpecialPlateRow(show) {
-  const el = document.getElementById('special-plate-row');
-  if (!el) return;
-  if (show) el.classList.remove('hidden');
-  else el.classList.add('hidden');
-}
+
 function switchCategory(cat) {
   CURRENT_CATEGORY = cat;
   document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
   const btn = document.querySelector(`.cat-btn[data-cat="${cat}"]`);
   if (btn) btn.classList.add('active');
   document.getElementById('menu-search').value = '';
-  toggleSpecialPlateRow(cat === 'general');
   renderItems();
 }
 function renderItems() {
@@ -1172,27 +1077,38 @@ function findItemById(id) {
 function handleItemClick(id) {
   const item = findItemById(id);
   if (!item) return;
-  if (item.halfPlate) showHalfPlateModal(item);
-  else addToCart(id, 'Full', item.price);
+  if (item.halfPlate || item.altEligible) {
+    showPlateSelectionModal(item);
+  } else {
+    addToCart(id, 'Full', item.price);
+  }
 }
-function showHalfPlateModal(item) {
+
+function showPlateSelectionModal(item) {
   const container = document.getElementById('modal-container');
   container.innerHTML = `
     <div class="modal-overlay">
       <div class="modal-small">
         <h3>${item.emoji || ''} ${item.name}</h3>
-        <p class="modal-sub">Choose plate size</p>
+        <p class="modal-sub">Choose plate type</p>
         <div class="choice-grid">
           <div class="choice-btn" onclick="choosePlate('${item.id}', 'Full')">
             <div class="choice-title">Full Plate</div>
             <div class="choice-pieces">${item.fullPieces || ''}</div>
             <div class="choice-price">₹${item.price}</div>
           </div>
+          ${item.halfPlate ? `
           <div class="choice-btn" onclick="choosePlate('${item.id}', 'Half')">
             <div class="choice-title">Half Plate</div>
             <div class="choice-pieces">${item.halfPieces || ''}</div>
             <div class="choice-price">₹${item.halfPrice}</div>
-          </div>
+          </div>` : ''}
+          ${item.altEligible ? `
+          <div class="choice-btn" onclick="showSingleAltModal('${item.id}')">
+            <div class="choice-title">Alternate Plate</div>
+            <div class="choice-pieces">Per Piece</div>
+            <div class="choice-price">₹${item.piecePrice}/pc</div>
+          </div>` : ''}
         </div>
         <div class="modal-buttons">
           <button class="modal-btn modal-btn-outline" onclick="closeModal()">Cancel</button>
@@ -1201,158 +1117,53 @@ function showHalfPlateModal(item) {
     </div>
   `;
 }
+
+function showSingleAltModal(id) {
+  const item = findItemById(id);
+  if (!item) return;
+  const container = document.getElementById('modal-container');
+  container.innerHTML = `
+    <div class="modal-overlay">
+      <div class="modal-small">
+        <h3>${item.emoji || ''} ${item.name} (Alternate)</h3>
+        <p class="modal-sub">Select quantity in pieces (₹${item.piecePrice}/pc)</p>
+        <div style="display:flex; justify-content:center; align-items:center; gap:15px; margin: 20px 0;">
+          <button class="qty-btn" onclick="changeAltQty(-1)" style="width:40px; height:40px; font-size:20px;">−</button>
+          <input type="number" id="alt-qty-input" value="1" min="1" style="width:80px; text-align:center; font-size:20px; font-weight:bold; border:2px solid var(--border); border-radius:8px; padding:5px;">
+          <button class="qty-btn" onclick="changeAltQty(1)" style="width:40px; height:40px; font-size:20px;">+</button>
+        </div>
+        <div class="modal-buttons">
+          <button class="modal-btn modal-btn-outline" onclick="closeModal()">Cancel</button>
+          <button class="modal-btn modal-btn-primary" onclick="addSingleAltToCart('${item.id}')">Add to Order</button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function changeAltQty(delta) {
+  const input = document.getElementById('alt-qty-input');
+  let val = parseInt(input.value) || 1;
+  val += delta;
+  if (val < 1) val = 1;
+  input.value = val;
+}
+
+function addSingleAltToCart(id) {
+  const item = findItemById(id);
+  const qty = parseInt(document.getElementById('alt-qty-input').value) || 1;
+  const price = item.piecePrice * qty;
+  const label = `${qty} pc ${item.name} (Alt)`;
+  const cartId = `alt-${item.id}x${qty}`;
+  addToCart(cartId, 'Alt', price, label);
+  closeModal();
+}
+
 function choosePlate(id, type) {
   const item = findItemById(id);
   if (!item) return;
   if (type === 'Full') addToCart(id, 'Full', item.price);
   else addToCart(id + '-half', 'Half', item.halfPrice, `Half ${item.name}`);
-  closeModal();
-}
-
-function openMixPlate() {
-  MIX_SELECTION = { item1: null, item2: null };
-  showMixModal();
-}
-function showMixModal() {
-  const eligible = MENU.general.filter(i => i.mixEligible);
-  const container = document.getElementById('modal-container');
-  const price = calcMixPrice();
-  container.innerHTML = `
-    <div class="modal-overlay">
-      <div class="modal-small">
-        <h3>🍽️ Mix Plate</h3>
-        <p class="modal-sub">Select 2 different items (½ + ½)</p>
-        <div class="mix-slot ${MIX_SELECTION.item1 ? 'filled' : ''}">
-          ${MIX_SELECTION.item1 ? '½ ' + MIX_SELECTION.item1.name : 'Slot 1: Pick below'}
-        </div>
-        <div class="mix-options">
-          ${eligible.map(i => {
-            const sel = (MIX_SELECTION.item1 && MIX_SELECTION.item1.id === i.id) || (MIX_SELECTION.item2 && MIX_SELECTION.item2.id === i.id);
-            return `<button class="mix-opt ${sel ? 'selected' : ''}" onclick='pickMix(${JSON.stringify(i)})'>${i.emoji} ${i.name}</button>`;
-          }).join('')}
-        </div>
-        <div class="mix-slot ${MIX_SELECTION.item2 ? 'filled' : ''}">
-          ${MIX_SELECTION.item2 ? '½ ' + MIX_SELECTION.item2.name : 'Slot 2: Pick below'}
-        </div>
-        <div class="mix-price" id="mix-price">₹${price}</div>
-        <div class="modal-buttons">
-          <button class="modal-btn modal-btn-outline" onclick="closeModal()">Cancel</button>
-          <button class="modal-btn modal-btn-primary" id="mix-add-btn" ${MIX_SELECTION.item1 && MIX_SELECTION.item2 ? '' : 'disabled'} onclick="addMixToCart()">
-            Add to Order
-          </button>
-        </div>
-      </div>
-    </div>
-  `;
-}
-function pickMix(item) {
-  if (!MIX_SELECTION.item1) { MIX_SELECTION.item1 = item; }
-  else if (!MIX_SELECTION.item2 && item.id !== MIX_SELECTION.item1.id) { MIX_SELECTION.item2 = item; }
-  else if (MIX_SELECTION.item1 && MIX_SELECTION.item2) {
-    if (item.id === MIX_SELECTION.item1.id) {
-      MIX_SELECTION.item1 = MIX_SELECTION.item2; MIX_SELECTION.item2 = null;
-    } else { MIX_SELECTION.item2 = item; }
-  }
-  else if (MIX_SELECTION.item1 && item.id === MIX_SELECTION.item1.id) { MIX_SELECTION.item1 = null; }
-  else if (MIX_SELECTION.item2 && item.id === MIX_SELECTION.item2.id) { MIX_SELECTION.item2 = null; }
-  showMixModal();
-}
-function calcMixPrice() {
-  if (!MIX_SELECTION.item1 || !MIX_SELECTION.item2) return 0;
-  const names = [MIX_SELECTION.item1.name, MIX_SELECTION.item2.name].join(' ').toLowerCase();
-  return names.includes('poori') ? MIX_PRICES.poori : MIX_PRICES.normal;
-}
-function addMixToCart() {
-  if (!MIX_SELECTION.item1 || !MIX_SELECTION.item2) return;
-  const price = calcMixPrice();
-  const label = `Mix: ${MIX_SELECTION.item1.name} + ${MIX_SELECTION.item2.name}`;
-  const id = `mix-${MIX_SELECTION.item1.id}-${MIX_SELECTION.item2.id}`;
-  addToCart(id, 'Mix', price, label);
-  closeModal();
-}
-
-function openAltPlate() {
-  ALT_SELECTION = {};
-  showAltModal();
-}
-function showAltModal() {
-  const eligible = [];
-  ['general', 'dosa', 'beverages'].forEach(cat => {
-    (MENU[cat] || []).forEach(item => {
-      if (item.altEligible) eligible.push({ ...item, cat });
-    });
-  });
-  if (eligible.length === 0) { toast('No items are eligible for Alternate Plate', 'error'); return; }
-  const container = document.getElementById('modal-container');
-  const rowsHtml = eligible.map(item => {
-    const sel = ALT_SELECTION[item.id];
-    const qty = sel ? sel.qty : 0;
-    return `
-      <div class="alt-item-row">
-        <span class="alt-item-name">${item.emoji || ''} ${item.name}</span>
-        <span class="alt-item-price">₹${item.piecePrice}/pc</span>
-        <div class="cart-qty">
-          <button class="qty-btn" onclick="altQty('${item.id}', -1)">−</button>
-          <span class="qty-value">${qty}</span>
-          <button class="qty-btn" onclick="altQty('${item.id}', 1)">+</button>
-        </div>
-      </div>
-    `;
-  }).join('');
-  const total = calcAltTotal();
-  const count = Object.values(ALT_SELECTION).reduce((s, x) => s + x.qty, 0);
-  container.innerHTML = `
-    <div class="modal-overlay">
-      <div class="modal-small" style="max-width:520px;">
-        <h3>🍽️ Alternate Plate</h3>
-        <p class="modal-sub">Pick items and pieces. Total = sum of piece prices.</p>
-        <div style="max-height:340px;overflow-y:auto;padding-right:4px;">
-          ${rowsHtml}
-        </div>
-        <div class="alt-total">
-          Total: ₹${total}
-          <small style="display:block;font-size:11px;font-weight:500;color:var(--text-light);">
-            ${count} piece${count === 1 ? '' : 's'} selected
-          </small>
-        </div>
-        <div class="modal-buttons">
-          <button class="modal-btn modal-btn-outline" onclick="closeModal()">Cancel</button>
-          <button class="modal-btn modal-btn-primary" id="alt-add-btn" ${count > 0 ? '' : 'disabled'} onclick="addAltToCart()">
-            Add to Order
-          </button>
-        </div>
-      </div>
-    </div>
-  `;
-}
-function altQty(itemId, delta) {
-  let item = null;
-  ['general', 'dosa', 'beverages'].forEach(cat => {
-    const found = (MENU[cat] || []).find(i => i.id === itemId);
-    if (found) item = found;
-  });
-  if (!item) return;
-  if (!ALT_SELECTION[itemId]) {
-    if (delta > 0) ALT_SELECTION[itemId] = { item, qty: 1 };
-  } else {
-    ALT_SELECTION[itemId].qty += delta;
-    if (ALT_SELECTION[itemId].qty <= 0) delete ALT_SELECTION[itemId];
-  }
-  showAltModal();
-}
-function calcAltTotal() {
-  let total = 0;
-  Object.values(ALT_SELECTION).forEach(({ item, qty }) => { total += (item.piecePrice || 0) * qty; });
-  return total;
-}
-function addAltToCart() {
-  const entries = Object.values(ALT_SELECTION);
-  if (entries.length === 0) { toast('Pick at least one item', 'error'); return; }
-  const total = calcAltTotal();
-  const labelParts = entries.map(({ item, qty }) => `${qty} ${item.name}`);
-  const label = 'Alt: ' + labelParts.join(' + ');
-  const id = 'alt-' + entries.slice().sort((a, b) => a.item.id.localeCompare(b.item.id)).map(({ item, qty }) => `${item.id}x${qty}`).join('-');
-  addToCart(id, 'Alt', total, label);
   closeModal();
 }
 
@@ -1478,8 +1289,8 @@ async function loadSales() {
     const items = o.items.map(i => `${i.name} × ${i.quantity}`).join(', ');
     const badge = o.cancelled ? '<span class="badge badge-cancelled">CANCELLED</span>' : (o.payment === 'Cash' ? '<span class="badge badge-cash">Cash</span>' : '<span class="badge badge-upi">UPI</span>');
     const actions = o.cancelled ? '—' : `
-      <button class="action-btn action-edit" onclick="editOrder(${o.token})"><i class="fas fa-edit"></i> Edit</button>
-      <button class="action-btn action-cancel" onclick="cancelOrder(${o.token})"><i class="fas fa-ban"></i> Cancel</button>
+      <button class="action-btn action-edit" onclick="editOrder(${o.token}, '${o.date}')"><i class="fas fa-edit"></i> Edit</button>
+      <button class="action-btn action-cancel" onclick="cancelOrder(${o.token}, '${o.date}')"><i class="fas fa-ban"></i> Cancel</button>
     `;
     return `<tr>
       <td><span class="token-badge">#${String(o.token).padStart(3, '0')}</span></td>
@@ -1492,10 +1303,10 @@ async function loadSales() {
   }).join('');
 }
 
-async function editOrder(token) {
+async function editOrder(token, date) {
   const res = await fetch(`${API}/orders`);
   const orders = await res.json();
-  const order = orders.find(o => o.token === token);
+  const order = orders.find(o => o.token === token && o.date === date);
   if (!order) return;
   window._editOrderData = JSON.parse(JSON.stringify(order.items));
   renderEditModal(order);
@@ -1537,7 +1348,7 @@ function renderEditModal(order) {
         </div>
         <div class="modal-buttons">
           <button class="modal-btn modal-btn-outline" onclick="closeModal()">Cancel</button>
-          <button class="modal-btn modal-btn-primary" onclick="saveEditedOrder(${order.token})"><i class="fas fa-save"></i> Save Changes</button>
+          <button class="modal-btn modal-btn-primary" onclick="saveEditedOrder(${order.token}, '${order.date}')"><i class="fas fa-save"></i> Save Changes</button>
         </div>
       </div>
     </div>
@@ -1572,11 +1383,11 @@ function refreshEditModal() {
   const t = document.getElementById('edit-total');
   if (t) t.textContent = '₹' + total;
 }
-async function saveEditedOrder(token) {
+async function saveEditedOrder(token, date) {
   const data = window._editOrderData;
   if (data.length === 0) { alert('Order must have at least one item'); return; }
   const payment = document.getElementById('edit-payment').value;
-  const res = await fetch(`${API}/orders/${token}`, {
+  const res = await fetch(`${API}/orders/${token}?date=${date}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ items: data, payment })
@@ -1584,9 +1395,9 @@ async function saveEditedOrder(token) {
   if (res.ok) { closeModal(); loadSales(); }
   else { alert('Failed to update order'); }
 }
-async function cancelOrder(token) {
+async function cancelOrder(token, date) {
   if (!confirm(`Cancel Order #${String(token).padStart(3,'0')}?\n\nThis will mark it as cancelled but keep the record.`)) return;
-  const res = await fetch(`${API}/orders/${token}/cancel`, { method: 'PUT' });
+  const res = await fetch(`${API}/orders/${token}/cancel?date=${date}`, { method: 'PUT' });
   if (res.ok) loadSales();
   else alert('Failed to cancel');
 }
@@ -1630,7 +1441,6 @@ function showMenuSubTab(subtab) {
   }
 }
 
-// 1. ADD MENU
 async function saveNewMenuItem() {
   const name = document.getElementById('add-name').value.trim();
   if (!name) { toast('Item name is required', 'error'); return; }
@@ -1649,7 +1459,6 @@ async function saveNewMenuItem() {
     fullPieces: document.getElementById('add-fullPieces').value.trim(),
     halfPieces: document.getElementById('add-halfPieces').value.trim(),
     halfPlate: document.getElementById('add-halfPlate').checked,
-    mixEligible: document.getElementById('add-mixEligible').checked,
     altEligible: document.getElementById('add-altEligible').checked
   };
 
@@ -1668,7 +1477,7 @@ async function saveNewMenuItem() {
       await loadMenu();
       showMenuSubTab('main');
       ['add-name','add-emoji','add-price','add-halfPrice','add-piecePrice','add-fullPieces','add-halfPieces'].forEach(id => document.getElementById(id).value = '');
-      ['add-halfPlate','add-mixEligible','add-altEligible'].forEach(id => document.getElementById(id).checked = false);
+      ['add-halfPlate','add-altEligible'].forEach(id => document.getElementById(id).checked = false);
     } else {
       const err = await res.json();
       toast(err.error || 'Failed to add item', 'error');
@@ -1680,7 +1489,6 @@ async function saveNewMenuItem() {
   btn.innerHTML = '<i class="fas fa-save"></i> Add Item';
 }
 
-// 2. EDIT MENU (Old functions from original code, kept intact)
 function searchMenuEditor() {
   const q = document.getElementById('edit-menu-search').value.toLowerCase().trim();
   const resultsEl = document.getElementById('edit-search-results');
@@ -1744,7 +1552,6 @@ function openItemEditor(id) {
       </div>
       <div class="checkbox-row">
         <label><input type="checkbox" id="edit-halfPlate" ${item.halfPlate ? 'checked' : ''}> Half Plate eligible</label>
-        <label><input type="checkbox" id="edit-mixEligible" ${item.mixEligible ? 'checked' : ''}> Mix Plate eligible</label>
         <label><input type="checkbox" id="edit-altEligible" ${item.altEligible ? 'checked' : ''}> Alternate Plate eligible</label>
       </div>
       <div class="edit-actions">
@@ -1768,7 +1575,6 @@ async function saveMenuItem(id) {
     halfPieces: document.getElementById('edit-halfPieces').value.trim(),
     piecePrice: parseInt(document.getElementById('edit-piecePrice').value) || 0,
     halfPlate: document.getElementById('edit-halfPlate').checked,
-    mixEligible: document.getElementById('edit-mixEligible').checked,
     altEligible: document.getElementById('edit-altEligible').checked,
     category: document.getElementById('edit-category').value
   };
@@ -1786,7 +1592,6 @@ async function saveMenuItem(id) {
   }
 }
 
-// 3. DELETE MENU
 function searchMenuDelete() {
   const q = document.getElementById('delete-menu-search').value.toLowerCase().trim();
   const resultsEl = document.getElementById('delete-search-results');
@@ -1822,7 +1627,7 @@ async function confirmDeleteItem(id, name) {
     if (res.ok) {
       toast('Item deleted from menu', 'success');
       await loadMenu();
-      searchMenuDelete(); // refresh results
+      searchMenuDelete();
     } else {
       toast('Failed to delete item', 'error');
     }
@@ -1831,8 +1636,6 @@ async function confirmDeleteItem(id, name) {
   }
 }
 
-
-// ADMIN PANEL
 async function loadAdminInfo() {
   const res = await fetch(`${API}/settings`);
   const data = await res.json();

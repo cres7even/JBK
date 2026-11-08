@@ -25,8 +25,14 @@ module.exports = async (req, res) => {
     });
   });
 
+  // Sort by highest quantity, then highest revenue
+  const sortedItems = Object.values(itemAgg).sort((a, b) => {
+    if (b.quantity !== a.quantity) return b.quantity - a.quantity;
+    return b.revenue - a.revenue;
+  });
+
   return json(res, 200, {
     date, totalOrders: active.length, totalSales, cashSales, upiSales,
-    items: Object.values(itemAgg), orders: active
+    items: sortedItems, orders: active
   });
 };
